@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeMaster AI — World-Class Typing Platform | WPM Test, Coding Typing, AI Coach</title>
+  <meta name="description" content="TypeMaster AI is the most advanced typing platform for students, programmers, and professionals. AI coaching, coding mode, Tamil typing, placement prep, gamification, and real-time analytics." />
+  <meta name="keywords" content="typing test, WPM test, typing speed, AI typing coach, coding typing, Tamil typing, placement preparation, typing game, keyboard speed" />
+  <meta name="author" content="TypeMaster AI" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://typemasterai.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="TypeMaster AI — Type Faster. Think Smarter." />
+  <meta property="og:description" content="The world's most intelligent typing platform with AI coaching, coding modes, Tamil support, and gamification." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://typemasterai.com/" />
+  <meta property="og:image" content="https://typemasterai.com/assets/og-cover.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="TypeMaster AI" />
+  <meta name="twitter:description" content="AI-powered typing platform for students, coders, and professionals." />
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "TypeMaster AI",
+    "url": "https://typemasterai.com",
+    "applicationCategory": "EducationApplication",
+    "description": "AI-powered typing speed test and coaching platform",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "12847"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    /* ── Hero typing demo animation ── */
+    .hero-chars span { opacity: 0; animation: charReveal 0.05s forwards; }
+    @keyframes charReveal { to { opacity: 1; } }
+    .hero-cursor { display: inline-block; width: 2px; height: 1.4em; background: var(--neon-blue); vertical-align: middle; animation: blink 1s steps(1) infinite; margin-left: 2px; }
+
+    /* ── Mode showcase grid ── */
+    .modes-showcase { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media(max-width:900px){ .modes-showcase { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:580px){ .modes-showcase { grid-template-columns: 1fr; } }
+    .mode-pill {
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .mode-pill:hover { transform: translateX(4px); }
+    .mode-pill-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .mode-pill-text strong { display: block; font-size: 0.95rem; font-weight: 600; }
+    .mode-pill-text span  { font-size: 0.78rem; color: var(--text-secondary); }
+
+    /* ── Roadmap / How it works ── */
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; position: relative; }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 32px; left: 12.5%; right: 12.5%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-purple), transparent);
+      opacity: 0.35;
+    }
+    @media(max-width:768px){ .steps { grid-template-columns: repeat(2,1fr); } .steps::before { display: none; } }
+    .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+    .step-num {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(168,85,247,0.15));
+      border: 1px solid rgba(0,212,255,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
+      color: var(--neon-blue); margin-bottom: 20px;
+    }
+    .step h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+    .step p  { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── Testimonial scroller ── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    @media(max-width:900px){ .testimonials-grid { grid-template-columns: 1fr; } }
+
+    /* ── Pricing ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    @media(max-width:900px){ .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
+
+    /* ── Blog ── */
+    .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    @media(max-width:900px){ .blog-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width:580px){ .blog-grid { grid-template-columns: 1fr; } }
+
+    /* ── Affiliate banner ── */
+    .affiliate-banner {
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      padding: 28px 40px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.07), rgba(168,85,247,0.07));
+      border: 1px solid rgba(0,212,255,0.15);
+      border-radius: var(--radius-xl);
+      flex-wrap: wrap;
+    }
+    @media(max-width:600px){ .affiliate-banner { padding: 24px; flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- ══ NAVIGATION ══════════════════════════════════════════ -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="TypeMaster AI Home">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="pages/typing-test.html">Practice</a></li>
+        <li><a href="pages/dashboard.html">Dashboard</a></li>
+        <li><a href="pages/leaderboard.html">Leaderboard</a></li>
+        <li><a href="pages/blog.html">Blog</a></li>
+        <li><a href="pages/premium.html">Premium</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="pages/profile.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="pages/premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ════════════════════════════════════════════════ -->
+  <section class="hero" aria-label="Hero section">
+    <div class="hero-bg-glow glow-1"></div>
+    <div class="hero-bg-glow glow-2"></div>
+
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Left -->
+        <div>
+          <div class="section-label animate-fade-up">
+            <span>AI-Powered Typing Platform</span>
+          </div>
+
+          <h1 class="display-xl animate-fade-up delay-1" style="margin-bottom:20px">
+            Type Faster.<br/>
+            <span class="gradient-text">Think Smarter.</span>
+          </h1>
+
+          <p class="body-lg text-secondary animate-fade-up delay-2" style="max-width:520px;margin-bottom:36px">
+            The world's most advanced typing platform with real-time AI coaching, coding modes, Tamil support, placement prep, and full gamification. Used by 500K+ learners daily.
+          </p>
+
+          <div class="flex gap-12 animate-fade-up delay-3" style="flex-wrap:wrap;margin-bottom:48px">
+            <a href="pages/typing-test.html" class="btn btn-primary btn-lg">
+              ⌨ Start Typing Free
+            </a>
+            <a href="#features" class="btn btn-secondary btn-lg">
+              Explore Features
+            </a>
+          </div>
+
+          <!-- Mini stats -->
+          <div class="flex gap-32 animate-fade-up delay-4" style="flex-wrap:wrap">
+            <div>
+              <div class="mono" style="font-size:1.5rem;font-weight:700;color:var(--neon-blue)">500K+</div>
+              <div class="caption">Active Learners</div>
+            </div>
+            <div>
+              <div class="mono" style="font-size:1.5rem;font-weight:700;color:var(--neon-purple)">4.9★</div>
+              <div class="caption">User Rating</div>
+            </div>
+            <div>
+              <div class="mono" style="font-size:1.5rem;font-weight:700;color:var(--neon-cyan)">12+</div>
+              <div class="caption">Typing Modes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right — live typing preview card -->
+        <div class="hero-visual animate-fade-up delay-2">
+          <div class="hero-typing-preview glass-card" style="padding:32px">
+            <!-- Stats row -->
+            <div class="flex gap-24 mb-24">
+              <div class="typing-stat">
+                <span class="typing-stat-value" id="hero-wpm">0</span>
+                <span class="typing-stat-label">WPM</span>
+              </div>
+              <div class="typing-stat">
+                <span class="typing-stat-value" style="color:var(--neon-cyan)">99%</span>
+                <span class="typing-stat-label">Accuracy</span>
+              </div>
+              <div class="typing-stat">
+                <span class="typing-stat-value" style="color:var(--neon-gold)">42</span>
+                <span class="typing-stat-label">Streak 🔥</span>
+              </div>
+              <div style="margin-left:auto">
+                <span class="badge badge-gold">Level 17</span>
+              </div>
+            </div>
+
+            <!-- Fake typed text -->
+            <div style="font-family:var(--font-mono);font-size:1.05rem;line-height:2;padding:20px;background:rgba(0,0,0,0.35);border-radius:14px;border:1px solid rgba(255,255,255,0.05)">
+              <span style="color:var(--neon-cyan)">The quick brown fox jumps</span><span style="color:var(--neon-cyan)"> over </span><span style="color:var(--neon-cyan)">the lazy</span><span style="border-bottom:2px solid var(--neon-blue);color:var(--text-primary)"> </span><span style="color:var(--text-muted)">dog near the riverbank</span>
+            </div>
+
+            <!-- XP bar -->
+            <div class="mt-24">
+              <div class="flex justify-between mb-8">
+                <span class="caption">XP Progress — Level 17</span>
+                <span class="caption" style="color:var(--neon-blue)">3,420 / 4,000</span>
+              </div>
+              <div class="xp-bar-wrap">
+                <div class="xp-bar-fill" style="width:85%"></div>
+              </div>
+            </div>
+
+            <!-- AI Tip -->
+            <div style="margin-top:20px;padding:14px 16px;background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);border-radius:10px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-size:1.1rem">🤖</span>
+              <span style="font-size:0.82rem;color:var(--text-secondary)"><strong style="color:var(--neon-purple)">AI Coach:</strong> Your ring finger hesitates on 'r' and 'f'. Try isolated drills for 2 minutes.</span>
+            </div>
+          </div>
+
+          <!-- Floating badges -->
+          <div class="floating-badge fb-1 glass-card">
+            <span>🏆</span><span style="color:var(--neon-gold)">Daily #1 Rank</span>
+          </div>
+          <div class="floating-badge fb-2 glass-card">
+            <span class="notif-dot"></span><span>127 WPM — New Personal Best!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ AdSense — Top Banner ════════════════════════════════ -->
+  <div class="container" style="position:relative;z-index:1">
+    <div class="adsense-horizontal">Advertisement · 728×90</div>
+  </div>
+
+  <!-- ══ STATS ════════════════════════════════════════════════ -->
+  <section style="position:relative;z-index:1;padding:0 0 80px">
+    <div class="container">
+      <div class="stats-row reveal">
+        <div class="stat-item">
+          <span class="stat-number counter" data-target="500000">0</span>
+          <span class="stat-label">Active Users</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number counter" data-target="12000000">0</span>
+          <span class="stat-label">Tests Completed</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number counter" data-target="98">0</span>
+          <span class="stat-label">% Satisfaction</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number counter" data-target="47">0</span>
+          <span class="stat-label">Avg WPM Boost</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ════════════════════════════════════════════ -->
+  <section class="section" id="features" aria-label="Features">
+    <div class="container">
+      <div class="text-center mb-40 reveal">
+        <div class="section-label" style="justify-content:center"><span>What makes us different</span></div>
+        <h2 class="display-lg mb-16">Everything you need to<br/><span class="gradient-text">master typing</span></h2>
+        <p class="body-lg text-secondary" style="max-width:580px;margin:0 auto">Twelve specialised modes powered by AI, designed for every type of learner from school students to senior engineers.</p>
+      </div>
+
+      <div class="feature-grid reveal">
+        <!-- AI Coach -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon blue">🤖</div>
+          <h3 class="heading-md mb-8">AI Typing Coach</h3>
+          <p class="body-md text-secondary mb-16">Real-time analysis of every keystroke. The AI identifies weak fingers, slow transitions, and error-prone bigrams, then prescribes targeted drills.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-blue">Mistake Analysis</span>
+            <span class="badge badge-purple">Personalized Drills</span>
+          </div>
+        </div>
+
+        <!-- Coding Mode -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon purple">💻</div>
+          <h3 class="heading-md mb-8">Coding Typing Mode</h3>
+          <p class="body-md text-secondary mb-16">Type real code snippets in Python, Java, C, JavaScript, and SQL. Special handling for brackets, indentation, and operators.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-blue">Python</span>
+            <span class="badge badge-blue">Java</span>
+            <span class="badge badge-blue">SQL</span>
+            <span class="badge badge-blue">JS</span>
+          </div>
+        </div>
+
+        <!-- Placement -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon gold">🎯</div>
+          <h3 class="heading-md mb-8">Placement Prep Mode</h3>
+          <p class="body-md text-secondary mb-16">Type aptitude questions, technical definitions, and HR interview answers. Build speed on exactly the content that matters for campus placements.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-gold">Aptitude</span>
+            <span class="badge badge-gold">Tech Definitions</span>
+          </div>
+        </div>
+
+        <!-- Engineering -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon cyan">🎓</div>
+          <h3 class="heading-md mb-8">Engineering Student Mode</h3>
+          <p class="body-md text-secondary mb-16">Branch-specific content for ECE, CSE, EEE, Mechanical, and Civil. Type formulas, theorems, and technical paragraphs from your own syllabus.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-blue">CSE</span>
+            <span class="badge badge-blue">ECE</span>
+            <span class="badge badge-blue">EEE</span>
+            <span class="badge badge-blue">MECH</span>
+          </div>
+        </div>
+
+        <!-- Tamil -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon pink">🌏</div>
+          <h3 class="heading-md mb-8">Tamil + English Typing</h3>
+          <p class="body-md text-secondary mb-16">Seamlessly switch between Tamil and English mid-session. Phonetic Tamil input, typewriter layout, and dedicated Tamil literature challenges.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-purple">தமிழ்</span>
+            <span class="badge badge-blue">Bilingual</span>
+          </div>
+        </div>
+
+        <!-- Gamification -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon gold">🏆</div>
+          <h3 class="heading-md mb-8">Gamification Engine</h3>
+          <p class="body-md text-secondary mb-16">XP, levels, coins, streak system, daily missions, and 40+ achievement badges. Competing against yourself has never been this addictive.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-gold">XP System</span>
+            <span class="badge badge-gold">Streak 🔥</span>
+            <span class="badge badge-gold">Badges</span>
+          </div>
+        </div>
+
+        <!-- Battle Arena -->
+        <div class="glass-card feature-card" style="position:relative">
+          <div class="ribbon">NEW</div>
+          <div class="feature-icon green">⚔️</div>
+          <h3 class="heading-md mb-8">Typing Battle Arena</h3>
+          <p class="body-md text-secondary mb-16">Real-time multiplayer races. Challenge friends, join global rooms, and climb the arena leaderboard. Up to 10 players per room.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-green">Multiplayer</span>
+            <span class="badge badge-green">Live Race</span>
+          </div>
+        </div>
+
+        <!-- Analytics -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon blue">📊</div>
+          <h3 class="heading-md mb-8">Analytics Dashboard</h3>
+          <p class="body-md text-secondary mb-16">WPM trends, accuracy graphs, key-level heatmaps, and progress charts across 30/90/365 day windows. Know exactly where you're improving.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-blue">Heatmap</span>
+            <span class="badge badge-blue">WPM Trend</span>
+          </div>
+        </div>
+
+        <!-- AI Content -->
+        <div class="glass-card feature-card">
+          <div class="feature-icon purple">✨</div>
+          <h3 class="heading-md mb-8">AI-Generated Practice Text</h3>
+          <p class="body-md text-secondary mb-16">Fresh content every session. AI generates paragraphs on AI, engineering, current affairs, programming, and your chosen topics — never repeat the same text twice.</p>
+          <div class="flex gap-8" style="flex-wrap:wrap">
+            <span class="badge badge-purple">Dynamic</span>
+            <span class="badge badge-purple">Topical</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MODES SHOWCASE ══════════════════════════════════════ -->
+  <section class="section" style="padding-top:0" id="modes">
+    <div class="container">
+      <div class="neon-line"></div>
+      <div class="text-center mb-40 reveal">
+        <h2 class="display-lg mb-16">Pick your <span class="gradient-text">mode</span></h2>
+        <p class="body-lg text-secondary">Twelve specialised environments, one platform.</p>
+      </div>
+      <div class="modes-showcase reveal">
+        <a href="pages/typing-test.html?mode=standard" class="glass-card mode-pill">
+          <span class="mode-pill-icon">⚡</span>
+          <div class="mode-pill-text">
+            <strong>Standard Test</strong>
+            <span>Classic WPM challenge</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=code" class="glass-card mode-pill">
+          <span class="mode-pill-icon">💻</span>
+          <div class="mode-pill-text">
+            <strong>Code Typing</strong>
+            <span>Python, Java, SQL, JS, C</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=placement" class="glass-card mode-pill">
+          <span class="mode-pill-icon">🎯</span>
+          <div class="mode-pill-text">
+            <strong>Placement Prep</strong>
+            <span>Aptitude & definitions</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=engineering" class="glass-card mode-pill">
+          <span class="mode-pill-icon">🎓</span>
+          <div class="mode-pill-text">
+            <strong>Engineering Mode</strong>
+            <span>CSE, ECE, MECH, EEE, Civil</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=tamil" class="glass-card mode-pill">
+          <span class="mode-pill-icon">🌏</span>
+          <div class="mode-pill-text">
+            <strong>Tamil Typing</strong>
+            <span>Switch between Tamil & English</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=daily" class="glass-card mode-pill">
+          <span class="mode-pill-icon">📅</span>
+          <div class="mode-pill-text">
+            <strong>Daily Challenge</strong>
+            <span>Resets every midnight</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=battle" class="glass-card mode-pill">
+          <span class="mode-pill-icon">⚔️</span>
+          <div class="mode-pill-text">
+            <strong>Battle Arena</strong>
+            <span>Multiplayer live race</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=ai" class="glass-card mode-pill">
+          <span class="mode-pill-icon">🤖</span>
+          <div class="mode-pill-text">
+            <strong>AI Drills</strong>
+            <span>Personalised weak-spot training</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=quotes" class="glass-card mode-pill">
+          <span class="mode-pill-icon">💬</span>
+          <div class="mode-pill-text">
+            <strong>Quotes Mode</strong>
+            <span>Famous quotes & wisdom</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=numbers" class="glass-card mode-pill">
+          <span class="mode-pill-icon">🔢</span>
+          <div class="mode-pill-text">
+            <strong>Numbers & Symbols</strong>
+            <span>Numeric keypad training</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=custom" class="glass-card mode-pill">
+          <span class="mode-pill-icon">📝</span>
+          <div class="mode-pill-text">
+            <strong>Custom Text</strong>
+            <span>Paste your own content</span>
+          </div>
+        </a>
+        <a href="pages/typing-test.html?mode=zen" class="glass-card mode-pill">
+          <span class="mode-pill-icon">🧘</span>
+          <div class="mode-pill-text">
+            <strong>Zen Mode</strong>
+            <span>No timer, no pressure</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ HOW IT WORKS ════════════════════════════════════════ -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="neon-line"></div>
+      <div class="text-center mb-60 reveal">
+        <div class="section-label" style="justify-content:center"><span>Simple process</span></div>
+        <h2 class="display-lg mb-16">From beginner to <span class="gradient-text">typing pro</span></h2>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h4>Create Free Account</h4>
+          <p>Sign up in 10 seconds. No credit card required. Your progress syncs across all devices.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h4>Take Baseline Test</h4>
+          <p>A 1-minute test measures your current WPM, accuracy, and finger-level weaknesses.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h4>AI Builds Your Plan</h4>
+          <p>The AI Coach analyses your results and creates a personalised daily training programme.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h4>Track & Level Up</h4>
+          <p>Practice daily, earn XP, unlock badges, and watch your WPM climb week by week.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DAILY CHALLENGE BANNER ══════════════════════════════ -->
+  <section style="position:relative;z-index:1;padding:0 0 80px">
+    <div class="container">
+      <div class="glass-card reveal" style="padding:40px;background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(168,85,247,0.06))">
+        <div class="flex justify-between items-center" style="flex-wrap:wrap;gap:24px">
+          <div>
+            <div class="section-label mb-12"><span>Today's Challenge</span></div>
+            <h3 class="heading-xl mb-8">🔥 Daily Challenge — <span class="gradient-text">Speed Burst</span></h3>
+            <p class="text-secondary body-md">Type 250 words with ≥96% accuracy. Earn 3× XP + 500 bonus coins. Resets in:</p>
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--neon-blue);margin-top:12px" id="challenge-timer">00:00:00</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-end">
+            <div class="flex gap-16">
+              <div style="text-align:center">
+                <div style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--neon-gold)">3×</div>
+                <div class="caption">XP Boost</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--neon-purple)">500</div>
+                <div class="caption">Bonus Coins</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--neon-cyan)">🏅</div>
+                <div class="caption">Badge</div>
+              </div>
+            </div>
+            <a href="pages/typing-test.html?mode=daily" class="btn btn-primary">Accept Challenge →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TESTIMONIALS ════════════════════════════════════════ -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="text-center mb-40 reveal">
+        <div class="section-label" style="justify-content:center"><span>Loved by learners</span></div>
+        <h2 class="display-lg mb-16">What our <span class="gradient-text">users say</span></h2>
+      </div>
+      <div class="testimonials-grid reveal">
+        <div class="glass-card testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"I went from 42 WPM to 89 WPM in 6 weeks. The AI coach identified that I was using the wrong finger for 'b' — something no other tool ever told me."</p>
+          <div class="testimonial-author">
+            <div class="avatar-circle">AR</div>
+            <div class="testimonial-meta">
+              <div class="name">Arjun Rajan</div>
+              <div class="role">CSE Student, Anna University</div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"The coding typing mode is a game-changer. I now type Python at 70 WPM with barely any errors. My productivity at work has visibly improved."</p>
+          <div class="testimonial-author">
+            <div class="avatar-circle" style="background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink))">PK</div>
+            <div class="testimonial-meta">
+              <div class="name">Priya Krishnamurthy</div>
+              <div class="role">Software Engineer, Zoho</div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"The placement prep mode helped me ace my Infosys typing test. I practiced technical definitions for two weeks and cleared it with 95% accuracy."</p>
+          <div class="testimonial-author">
+            <div class="avatar-circle" style="background:linear-gradient(135deg,var(--neon-gold),#ff8c00);color:#000">MV</div>
+            <div class="testimonial-meta">
+              <div class="name">Mohammed Vaseem</div>
+              <div class="role">Campus Recruit, Infosys</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LEADERBOARD PREVIEW ═════════════════════════════════ -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="neon-line"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start" class="reveal">
+        <div>
+          <div class="section-label mb-16"><span>Global Rankings</span></div>
+          <h2 class="display-md mb-24">Today's <span class="gradient-text">Top Typists</span></h2>
+          <div class="leaderboard-row rank-1">
+            <span class="rank-num rank-1">🥇</span>
+            <div class="avatar-circle" style="background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000">SK</div>
+            <div><div class="lb-name">Siddharth K.</div><div class="lb-sub">Chennai, TN</div></div>
+            <div class="lb-wpm">148 <span style="font-size:0.7rem;color:var(--text-muted)">WPM</span></div>
+          </div>
+          <div class="leaderboard-row">
+            <span class="rank-num" style="color:#C0C0C0">🥈</span>
+            <div class="avatar-circle" style="background:linear-gradient(135deg,#C0C0C0,#888);color:#000">RM</div>
+            <div><div class="lb-name">Rithika M.</div><div class="lb-sub">Bangalore, KA</div></div>
+            <div class="lb-wpm">141 <span style="font-size:0.7rem;color:var(--text-muted)">WPM</span></div>
+          </div>
+          <div class="leaderboard-row">
+            <span class="rank-num" style="color:#CD7F32">🥉</span>
+            <div class="avatar-circle" style="background:linear-gradient(135deg,#CD7F32,#8B4513)">AK</div>
+            <div><div class="lb-name">Aryan K.</div><div class="lb-sub">Mumbai, MH</div></div>
+            <div class="lb-wpm">138 <span style="font-size:0.7rem;color:var(--text-muted)">WPM</span></div>
+          </div>
+          <div class="leaderboard-row">
+            <span class="rank-num" style="color:var(--text-muted)">4</span>
+            <div class="avatar-circle">NP</div>
+            <div><div class="lb-name">Nithya P.</div><div class="lb-sub">Coimbatore, TN</div></div>
+            <div class="lb-wpm">131 <span style="font-size:0.7rem;color:var(--text-muted)">WPM</span></div>
+          </div>
+          <div class="leaderboard-row">
+            <span class="rank-num" style="color:var(--text-muted)">5</span>
+            <div class="avatar-circle" style="background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink))">VR</div>
+            <div><div class="lb-name">Vikram R.</div><div class="lb-sub">Hyderabad, TS</div></div>
+            <div class="lb-wpm">128 <span style="font-size:0.7rem;color:var(--text-muted)">WPM</span></div>
+          </div>
+          <div style="margin-top:20px">
+            <a href="pages/leaderboard.html" class="btn btn-ghost w-full" style="justify-content:center">View Full Leaderboard →</a>
+          </div>
+        </div>
+
+        <!-- Achievements preview -->
+        <div>
+          <div class="section-label mb-16"><span>Achievements</span></div>
+          <h2 class="display-md mb-24">Earn <span class="gradient-text">40+ Badges</span></h2>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+            <div class="glass-card achievement">
+              <div class="achievement-icon">🚀</div>
+              <div class="achievement-name">Century Club</div>
+              <div class="achievement-desc">100 WPM</div>
+            </div>
+            <div class="glass-card achievement">
+              <div class="achievement-icon">🔥</div>
+              <div class="achievement-name">On Fire</div>
+              <div class="achievement-desc">30-day streak</div>
+            </div>
+            <div class="glass-card achievement">
+              <div class="achievement-icon">💎</div>
+              <div class="achievement-name">Perfectionist</div>
+              <div class="achievement-desc">100% accuracy</div>
+            </div>
+            <div class="glass-card achievement">
+              <div class="achievement-icon">⚔️</div>
+              <div class="achievement-name">Arena King</div>
+              <div class="achievement-desc">Win 10 battles</div>
+            </div>
+            <div class="glass-card achievement" style="opacity:0.4">
+              <div class="achievement-icon" style="filter:grayscale(1)">🏅</div>
+              <div class="achievement-name">Night Owl</div>
+              <div class="achievement-desc">Locked</div>
+            </div>
+            <div class="glass-card achievement" style="opacity:0.4">
+              <div class="achievement-icon" style="filter:grayscale(1)">🎭</div>
+              <div class="achievement-name">Polyglot</div>
+              <div class="achievement-desc">Locked</div>
+            </div>
+            <div class="glass-card achievement" style="opacity:0.4">
+              <div class="achievement-icon" style="filter:grayscale(1)">📚</div>
+              <div class="achievement-name">Scholar</div>
+              <div class="achievement-desc">Locked</div>
+            </div>
+            <div class="glass-card achievement" style="opacity:0.4">
+              <div class="achievement-icon" style="filter:grayscale(1)">🌟</div>
+              <div class="achievement-name">Legend</div>
+              <div class="achievement-desc">Locked</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRICING ═════════════════════════════════════════════ -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="neon-line"></div>
+      <div class="text-center mb-40 reveal">
+        <div class="section-label" style="justify-content:center"><span>Pricing</span></div>
+        <h2 class="display-lg mb-16">Simple, <span class="gradient-text">transparent</span> pricing</h2>
+        <p class="body-lg text-secondary">Start free forever. Upgrade when you're ready.</p>
+      </div>
+      <div class="pricing-grid reveal">
+        <!-- Free -->
+        <div class="glass-card pricing-card">
+          <div class="badge badge-blue mb-16">Free</div>
+          <div class="flex items-end gap-4 mb-8">
+            <span class="price-amount gradient-text">₹0</span>
+          </div>
+          <p class="text-secondary body-md mb-24">Forever free. No credit card needed.</p>
+          <ul class="pricing-features">
+            <li>Unlimited standard tests</li>
+            <li>Basic WPM analytics</li>
+            <li>3 typing modes</li>
+            <li>Daily challenge access</li>
+            <li>Leaderboard visibility</li>
+            <li class="disabled">AI Typing Coach</li>
+            <li class="disabled">Coding Mode</li>
+            <li class="disabled">Tamil Typing</li>
+            <li class="disabled">Battle Arena</li>
+          </ul>
+          <a href="pages/typing-test.html" class="btn btn-secondary w-full" style="justify-content:center">Start Free</a>
+        </div>
+
+        <!-- Pro -->
+        <div class="glass-card pricing-card popular-card" style="position:relative">
+          <div class="ribbon">Most Popular</div>
+          <div class="badge badge-purple mb-16">Pro</div>
+          <div class="flex items-end gap-4 mb-8">
+            <span class="price-amount gradient-text">₹199</span>
+            <span class="price-period">/month</span>
+          </div>
+          <p class="text-secondary body-md mb-24">Everything you need to become elite.</p>
+          <ul class="pricing-features">
+            <li>Everything in Free</li>
+            <li>AI Typing Coach (full)</li>
+            <li>All 12 typing modes</li>
+            <li>Coding typing (5 languages)</li>
+            <li>Tamil typing mode</li>
+            <li>Battle Arena — unlimited</li>
+            <li>Advanced analytics + heatmap</li>
+            <li>AI-generated content</li>
+            <li>Remove ads</li>
+          </ul>
+          <a href="pages/premium.html" class="btn btn-primary w-full" style="justify-content:center">Get Pro →</a>
+        </div>
+
+        <!-- Team -->
+        <div class="glass-card pricing-card">
+          <div class="badge badge-gold mb-16">Team</div>
+          <div class="flex items-end gap-4 mb-8">
+            <span class="price-amount gradient-text-gold">₹999</span>
+            <span class="price-period">/month</span>
+          </div>
+          <p class="text-secondary body-md mb-24">For institutes, coaching centres and companies.</p>
+          <ul class="pricing-features">
+            <li>Everything in Pro</li>
+            <li>Up to 50 members</li>
+            <li>Admin dashboard</li>
+            <li>Custom practice content</li>
+            <li>Progress reports & exports</li>
+            <li>Priority support</li>
+            <li>White-label option</li>
+            <li>API access</li>
+            <li>SLA guarantee</li>
+          </ul>
+          <a href="pages/premium.html" class="btn btn-secondary w-full" style="justify-content:center">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BLOG PREVIEW ════════════════════════════════════════ -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="flex justify-between items-center mb-32 reveal">
+        <div>
+          <div class="section-label mb-12"><span>Blog & Resources</span></div>
+          <h2 class="display-md">Latest <span class="gradient-text">Articles</span></h2>
+        </div>
+        <a href="pages/blog.html" class="btn btn-ghost">View All →</a>
+      </div>
+      <div class="blog-grid reveal">
+        <div class="glass-card blog-card">
+          <div class="blog-thumb">⌨️</div>
+          <div class="blog-body">
+            <div class="blog-date">June 12, 2025 · 5 min read</div>
+            <h3 class="blog-title">How to Type at 100 WPM in 30 Days: The Complete Roadmap</h3>
+            <p class="blog-excerpt">A science-backed daily plan that combines deliberate practice with muscle memory formation to double your typing speed.</p>
+            <a href="pages/blog.html" class="btn btn-ghost btn-sm" style="margin-top:16px">Read More →</a>
+          </div>
+        </div>
+        <div class="glass-card blog-card">
+          <div class="blog-thumb">💻</div>
+          <div class="blog-body">
+            <div class="blog-date">June 8, 2025 · 7 min read</div>
+            <h3 class="blog-title">Why Programmers Should Practice Code Typing Separately</h3>
+            <p class="blog-excerpt">Natural language and code use entirely different finger patterns. Here's how to train them independently.</p>
+            <a href="pages/blog.html" class="btn btn-ghost btn-sm" style="margin-top:16px">Read More →</a>
+          </div>
+        </div>
+        <div class="glass-card blog-card">
+          <div class="blog-thumb">🎯</div>
+          <div class="blog-body">
+            <div class="blog-date">June 3, 2025 · 4 min read</div>
+            <h3 class="blog-title">Top 10 Typing Tips for Campus Placement Tests in 2025</h3>
+            <p class="blog-excerpt">Companies like TCS, Infosys, and Wipro all test typing. Here's exactly how to prepare and clear them with ease.</p>
+            <a href="pages/blog.html" class="btn btn-ghost btn-sm" style="margin-top:16px">Read More →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ AFFILIATE ═══════════════════════════════════════════ -->
+  <section style="position:relative;z-index:1;padding:0 0 80px">
+    <div class="container">
+      <div class="affiliate-banner reveal">
+        <div>
+          <div class="badge badge-gold mb-12">Affiliate Programme</div>
+          <h3 class="heading-xl mb-8">Earn 30% recurring commission</h3>
+          <p class="text-secondary body-md">Refer students, teachers, or institutes. Earn every month they stay subscribed. No cap on earnings.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;align-items:center">
+          <div style="font-family:var(--font-display);font-size:2.5rem;font-weight:900;color:var(--neon-gold)">30%</div>
+          <div class="caption" style="text-align:center">Per referral, monthly</div>
+          <a href="#" class="btn btn-primary">Join Programme →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ AdSense — Bottom ════════════════════════════════════ -->
+  <div class="container" style="position:relative;z-index:1;padding-bottom:60px">
+    <div class="adsense-horizontal">Advertisement · 728×90</div>
+  </div>
+
+  <!-- ══ CTA ═════════════════════════════════════════════════ -->
+  <section style="position:relative;z-index:1;padding:80px 0">
+    <div class="container">
+      <div class="glass-card text-center reveal" style="padding:80px 40px;background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(168,85,247,0.06))">
+        <h2 class="display-lg mb-16">Start typing better <span class="gradient-text">today</span></h2>
+        <p class="body-lg text-secondary mb-32" style="max-width:480px;margin:0 auto 32px">Join 500,000+ learners who've already accelerated their typing. Free forever. No credit card.</p>
+        <div class="flex gap-16" style="justify-content:center;flex-wrap:wrap">
+          <a href="pages/typing-test.html" class="btn btn-primary btn-lg">⌨ Begin Your First Test</a>
+          <a href="pages/profile.html" class="btn btn-secondary btn-lg">Create Free Account</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">
+            <div class="nav-logo-icon">⌨</div>
+            <span class="gradient-text" style="font-family:var(--font-display);font-size:1.1rem;font-weight:700">TypeMaster AI</span>
+          </div>
+          <p class="footer-desc">The world's most intelligent typing platform. AI coaching, coding modes, Tamil support, and gamification — all in one place.</p>
+          <div class="flex gap-12 mt-24">
+            <a href="#" aria-label="Twitter" class="btn btn-ghost btn-sm">𝕏</a>
+            <a href="#" aria-label="LinkedIn" class="btn btn-ghost btn-sm">in</a>
+            <a href="#" aria-label="YouTube" class="btn btn-ghost btn-sm">▶</a>
+            <a href="#" aria-label="Instagram" class="btn btn-ghost btn-sm">◎</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="pages/typing-test.html">Typing Test</a></li>
+            <li><a href="pages/typing-test.html?mode=code">Code Typing</a></li>
+            <li><a href="pages/typing-test.html?mode=placement">Placement Prep</a></li>
+            <li><a href="pages/typing-test.html?mode=tamil">Tamil Typing</a></li>
+            <li><a href="pages/typing-test.html?mode=battle">Battle Arena</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="pages/blog.html">Blog</a></li>
+            <li><a href="pages/dashboard.html">Dashboard</a></li>
+            <li><a href="pages/leaderboard.html">Leaderboard</a></li>
+            <li><a href="pages/profile.html">My Profile</a></li>
+            <li><a href="#">API Docs</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 TypeMaster AI. All rights reserved. Made with ❤️ in Chennai, India.</p>
+        <p>Trusted by 500K+ learners across 40+ countries.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — TypeMaster AI | Typing Tips, WPM Guides, Programming Productivity</title>
+  <meta name="description" content="Expert typing tips, WPM improvement guides, coding productivity articles, Tamil typing tutorials, and placement test strategies — all from TypeMaster AI." />
+  <meta name="keywords" content="typing tips, how to type faster, improve WPM, coding typing, touch typing guide, Tamil typing tutorial, placement typing test, keyboard shortcuts" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://typemasterai.com/pages/blog.html" />
+  <meta property="og:title" content="TypeMaster AI Blog — Typing Tips & Productivity" />
+  <meta property="og:description" content="Expert typing guides and strategies for students, programmers, and professionals." />
+  <meta property="og:type" content="blog" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "TypeMaster AI Blog",
+    "url": "https://typemasterai.com/pages/blog.html",
+    "description": "Expert typing tips, WPM guides, and productivity articles"
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; }
+    .blog-page { max-width: 1200px; margin: 0 auto; padding: 48px 24px; }
+    @media(max-width:640px){ .blog-page { padding: 24px 16px; } }
+
+    /* ── Layout ── */
+    .blog-layout { display: grid; grid-template-columns: 1fr 320px; gap: 32px; }
+    @media(max-width:960px){ .blog-layout { grid-template-columns: 1fr; } .blog-sidebar { display: none; } }
+
+    /* ── Featured post ── */
+    .featured-post {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+      min-height: 420px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      margin-bottom: 48px;
+      cursor: pointer;
+    }
+    .featured-thumb {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(168,85,247,0.25), rgba(247,0,255,0.15));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8rem;
+    }
+    .featured-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(3,3,8,0.95) 0%, rgba(3,3,8,0.3) 60%, transparent 100%);
+    }
+    .featured-content {
+      position: relative; z-index: 1;
+      padding: 40px;
+    }
+    @media(max-width:640px){ .featured-content { padding: 24px; } }
+    .featured-tag { margin-bottom: 12px; }
+    .featured-title { font-size: clamp(1.4rem,3vw,2rem); font-weight: 700; line-height: 1.25; margin-bottom: 12px; }
+    .featured-excerpt { font-size: 0.95rem; color: var(--text-secondary); max-width: 600px; line-height: 1.7; margin-bottom: 20px; }
+    .featured-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .author-chip { display: flex; align-items: center; gap: 8px; }
+    .author-av { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple)); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+    .author-name { font-size: 0.85rem; font-weight: 600; }
+    .post-date { font-size: 0.8rem; color: var(--text-muted); }
+    .read-time { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* ── Category filter ── */
+    .cat-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+    .cat-btn {
+      padding: 7px 18px; border-radius: 100px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary); font-size: 0.83rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .cat-btn.active { background: rgba(0,212,255,0.12); border-color: rgba(0,212,255,0.35); color: var(--neon-blue); }
+    .cat-btn:hover:not(.active) { color: var(--text-primary); border-color: rgba(255,255,255,0.2); }
+
+    /* ── Article grid ── */
+    .articles-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; margin-bottom: 32px; }
+    @media(max-width:640px){ .articles-grid { grid-template-columns: 1fr; } }
+
+    .article-card { cursor: pointer; }
+    .article-thumb {
+      height: 160px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(168,85,247,0.1));
+    }
+    .article-body { padding: 20px; }
+    .article-cat { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--neon-blue); margin-bottom: 8px; }
+    .article-title { font-size: 1rem; font-weight: 600; line-height: 1.4; margin-bottom: 8px; }
+    .article-excerpt { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
+    .article-footer { display: flex; align-items: center; justify-content: space-between; }
+    .article-date { font-size: 0.75rem; color: var(--text-muted); }
+    .article-read { font-size: 0.75rem; color: var(--neon-blue); font-weight: 600; }
+
+    /* ── List articles ── */
+    .article-list-row {
+      display: flex; gap: 16px; padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+    }
+    .article-list-row:last-child { border-bottom: none; }
+    .article-list-thumb {
+      width: 80px; height: 80px; flex-shrink: 0;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(168,85,247,0.1));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    .article-list-title { font-size: 0.9rem; font-weight: 600; line-height: 1.4; margin-bottom: 6px; }
+    .article-list-meta { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* ── Sidebar ── */
+    .blog-sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .sidebar-widget { padding: 24px; }
+    .widget-title { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    /* ── Newsletter ── */
+    .newsletter-form { display: flex; flex-direction: column; gap: 10px; }
+    .newsletter-input {
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-body); font-size: 0.88rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .newsletter-input:focus { border-color: rgba(0,212,255,0.5); }
+    .newsletter-input::placeholder { color: var(--text-muted); }
+
+    /* ── Trending tags ── */
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      padding: 5px 12px; border-radius: 100px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.78rem; color: var(--text-secondary); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tag:hover { background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.25); color: var(--neon-blue); }
+
+    /* ── Search ── */
+    .blog-search {
+      width: 100%; padding: 10px 16px;
+      background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md); color: var(--text-primary);
+      font-family: var(--font-body); font-size: 0.9rem; outline: none;
+      margin-bottom: 20px; transition: border-color 0.2s;
+    }
+    .blog-search:focus { border-color: rgba(0,212,255,0.5); }
+    .blog-search::placeholder { color: var(--text-muted); }
+
+    /* ── Popular post ── */
+    .pop-post { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); cursor: pointer; }
+    .pop-post:last-child { border-bottom: none; }
+    .pop-num { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: rgba(0,212,255,0.3); width: 28px; flex-shrink: 0; line-height: 1.4; }
+    .pop-title { font-size: 0.83rem; font-weight: 600; line-height: 1.4; }
+    .pop-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 3px; }
+
+    /* ── Pagination ── */
+    .pagination { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+    .page-btn {
+      width: 40px; height: 40px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-secondary); font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .page-btn:hover, .page-btn.active { background: rgba(0,212,255,0.12); border-color: rgba(0,212,255,0.35); color: var(--neon-blue); }
+    .page-btn.wide { width: auto; padding: 0 14px; }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html">Practice</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html" class="active">Blog</a></li>
+        <li><a href="premium.html">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="blog-page">
+
+    <!-- Header -->
+    <div class="text-center mb-48 reveal">
+      <div class="section-label" style="justify-content:center"><span>Typing Knowledge Hub</span></div>
+      <h1 class="display-lg mb-12">📖 <span class="gradient-text">TypeMaster Blog</span></h1>
+      <p class="body-lg text-secondary">Expert guides, WPM tips, coding productivity, Tamil typing, and placement strategies.</p>
+    </div>
+
+    <!-- Search bar -->
+    <input class="blog-search" type="text" placeholder="🔍  Search articles — 'WPM', 'Tamil typing', 'coding speed'..." />
+
+    <!-- Category filter -->
+    <div class="cat-filter reveal">
+      <button class="cat-btn active">All</button>
+      <button class="cat-btn">⚡ Speed Tips</button>
+      <button class="cat-btn">💻 Coding</button>
+      <button class="cat-btn">🎯 Placement</button>
+      <button class="cat-btn">🌏 Tamil</button>
+      <button class="cat-btn">🎓 Students</button>
+      <button class="cat-btn">🤖 AI & Tech</button>
+      <button class="cat-btn">⌨️ Keyboards</button>
+      <button class="cat-btn">📊 Productivity</button>
+    </div>
+
+    <!-- AdSense horizontal -->
+    <div class="adsense-horizontal reveal">Advertisement · 728×90</div>
+
+    <div class="blog-layout">
+
+      <!-- ── MAIN CONTENT ── -->
+      <main>
+
+        <!-- Featured Post -->
+        <article class="featured-post glass-card reveal" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+          <div class="featured-thumb">⌨️</div>
+          <div class="featured-content">
+            <div class="featured-tag"><span class="badge badge-blue">⚡ Speed Tips</span> <span class="badge badge-purple" style="margin-left:6px">FEATURED</span></div>
+            <h2 class="featured-title">How to Type at 100 WPM in 30 Days: The Complete Science-Backed Roadmap</h2>
+            <p class="featured-excerpt">A comprehensive daily training plan that uses deliberate practice, spaced repetition, and muscle memory science to double your typing speed — without burning out.</p>
+            <div class="featured-meta">
+              <div class="author-chip">
+                <div class="author-av">TM</div>
+                <div>
+                  <div class="author-name">TypeMaster AI Team</div>
+                </div>
+              </div>
+              <span class="post-date">📅 June 12, 2025</span>
+              <span class="read-time">🕐 8 min read</span>
+              <span style="font-size:0.78rem;color:var(--neon-cyan)">👁 24,812 views</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Category section: Speed Tips -->
+        <div class="mb-8 reveal">
+          <div class="section-label mb-20"><span>Speed Tips</span></div>
+        </div>
+
+        <div class="articles-grid reveal">
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(6,255,212,0.1))">⚡</div>
+            <div class="article-body">
+              <div class="article-cat">Speed Tips</div>
+              <h3 class="article-title">5 Finger Placement Mistakes That Are Capping Your WPM at 60</h3>
+              <p class="article-excerpt">Most typists hit a plateau at 60–70 WPM because of ingrained finger habits. Here's how to identify and fix them permanently.</p>
+              <div class="article-footer">
+                <span class="article-date">June 8, 2025 · 6 min</span>
+                <span class="article-read">Read →</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(168,85,247,0.12),rgba(247,0,255,0.08))">🏆</div>
+            <div class="article-body">
+              <div class="article-cat">Speed Tips</div>
+              <h3 class="article-title">The 15-Minute Daily Practice Routine That Top Typists Swear By</h3>
+              <p class="article-excerpt">Elite typists don't practice for hours — they practice smarter. This routine covers warm-up, drill, and cool-down phases.</p>
+              <div class="article-footer">
+                <span class="article-date">June 5, 2025 · 5 min</span>
+                <span class="article-read">Read →</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,140,0,0.08))">🔥</div>
+            <div class="article-body">
+              <div class="article-cat">Speed Tips</div>
+              <h3 class="article-title">Touch Typing vs. Hunt-and-Peck: Why the Difference Is 40 WPM</h3>
+              <p class="article-excerpt">Data from 50,000 TypeMaster AI users proves that touch typing isn't just faster — it's a completely different cognitive process.</p>
+              <div class="article-footer">
+                <span class="article-date">May 30, 2025 · 7 min</span>
+                <span class="article-read">Read →</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(57,255,20,0.08),rgba(6,255,212,0.1))">💡</div>
+            <div class="article-body">
+              <div class="article-cat">Speed Tips</div>
+              <h3 class="article-title">How Keyboard Layout Affects Your Speed: QWERTY vs Dvorak vs Colemak</h3>
+              <p class="article-excerpt">A data-driven comparison of keyboard layouts and whether switching really makes you faster in 2025.</p>
+              <div class="article-footer">
+                <span class="article-date">May 25, 2025 · 9 min</span>
+                <span class="article-read">Read →</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Category: Coding -->
+        <div class="neon-line reveal"></div>
+        <div class="mb-8 reveal"><div class="section-label mb-20"><span>Coding Productivity</span></div></div>
+
+        <div class="glass-card reveal" style="padding:0;overflow:hidden;margin-bottom:32px">
+          <article class="article-list-row" style="padding:16px 20px" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-list-thumb">💻</div>
+            <div>
+              <div class="article-list-title">Why Programmers Should Practice Code Typing Separately From Prose</div>
+              <div class="article-list-meta">June 8, 2025 · 7 min · 💻 Coding · 👁 18,340 views</div>
+            </div>
+          </article>
+          <article class="article-list-row" style="padding:16px 20px" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-list-thumb">🐍</div>
+            <div>
+              <div class="article-list-title">Typing Python Faster: Shortcuts, Patterns and Special Character Drills</div>
+              <div class="article-list-meta">June 2, 2025 · 6 min · 💻 Coding · 👁 12,891 views</div>
+            </div>
+          </article>
+          <article class="article-list-row" style="padding:16px 20px" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-list-thumb">☕</div>
+            <div>
+              <div class="article-list-title">Java Typing Speed: How to Type Verbose Java Code Without Slowing Down</div>
+              <div class="article-list-meta">May 28, 2025 · 8 min · 💻 Coding · 👁 9,442 views</div>
+            </div>
+          </article>
+          <article class="article-list-row" style="padding:16px 20px" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-list-thumb">🗄️</div>
+            <div>
+              <div class="article-list-title">SQL Query Typing Drills for Backend Developers and Data Analysts</div>
+              <div class="article-list-meta">May 20, 2025 · 5 min · 💻 Coding · 👁 7,223 views</div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Category: Tamil Typing -->
+        <div class="neon-line reveal"></div>
+        <div class="mb-8 reveal"><div class="section-label mb-20"><span>Tamil Typing</span></div></div>
+
+        <div class="articles-grid reveal">
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(247,0,255,0.1),rgba(168,85,247,0.1))">🌏</div>
+            <div class="article-body">
+              <div class="article-cat" style="color:var(--neon-purple)">Tamil Typing</div>
+              <h3 class="article-title">Complete Guide to Tamil Typing on a QWERTY Keyboard in 2025</h3>
+              <p class="article-excerpt">Phonetic Tamil input, Bamini layout, and Tamil99 — which is the fastest for your use case? A thorough breakdown.</p>
+              <div class="article-footer">
+                <span class="article-date">June 10, 2025 · 10 min</span>
+                <span class="article-read">படிக்க →</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(168,85,247,0.12))">📝</div>
+            <div class="article-body">
+              <div class="article-cat" style="color:var(--neon-purple)">Tamil Typing</div>
+              <h3 class="article-title">Top Tamil Typing Competitions in Tamil Nadu and How to Prepare</h3>
+              <p class="article-excerpt">A guide to TNPSC, TANGEDCO, and other government typing tests with Tamil. Practice routines and expected WPM benchmarks.</p>
+              <div class="article-footer">
+                <span class="article-date">June 1, 2025 · 8 min</span>
+                <span class="article-read">படிக்க →</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Category: Placement -->
+        <div class="neon-line reveal"></div>
+        <div class="mb-8 reveal"><div class="section-label mb-20"><span>Placement Preparation</span></div></div>
+
+        <div class="glass-card reveal" style="padding:0;overflow:hidden;margin-bottom:32px">
+          <article class="article-list-row" style="padding:16px 20px" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-list-thumb">🎯</div>
+            <div>
+              <div class="article-list-title">Top 10 Typing Tips for Campus Placement Tests — TCS, Infosys, Wipro 2025</div>
+              <div class="article-list-meta">June 3, 2025 · 4 min · 🎯 Placement · 👁 31,220 views</div>
+            </div>
+          </article>
+          <article class="article-list-row" style="padding:16px 20px" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-list-thumb">📊</div>
+            <div>
+              <div class="article-list-title">What WPM Score Do You Need to Pass the Infosys Typing Test? (2025 Update)</div>
+              <div class="article-list-meta">May 29, 2025 · 3 min · 🎯 Placement · 👁 28,104 views</div>
+            </div>
+          </article>
+          <article class="article-list-row" style="padding:16px 20px" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-list-thumb">🏢</div>
+            <div>
+              <div class="article-list-title">How to Clear the TNPSC Typewriting Exam in 60 Days: A Step-by-Step Guide</div>
+              <div class="article-list-meta">May 22, 2025 · 12 min · 🎯 Placement · 👁 19,887 views</div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Category: AI & Tech -->
+        <div class="neon-line reveal"></div>
+        <div class="mb-8 reveal"><div class="section-label mb-20"><span>AI & Technology</span></div></div>
+
+        <div class="articles-grid reveal">
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(57,255,20,0.08))">🤖</div>
+            <div class="article-body">
+              <div class="article-cat" style="color:var(--neon-cyan)">AI & Tech</div>
+              <h3 class="article-title">How AI Analyses Your Typing and What It Tells You About Your Brain</h3>
+              <p class="article-excerpt">The science behind TypeMaster AI's coaching engine — from keystroke dynamics to personalised training algorithms.</p>
+              <div class="article-footer">
+                <span class="article-date">June 7, 2025 · 11 min</span>
+                <span class="article-read">Read →</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="glass-card article-card" onclick="window.TypeMaster.showToast('Opening article...','blue')">
+            <div class="article-thumb" style="background:linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,140,0,0.08))">⌨️</div>
+            <div class="article-body">
+              <div class="article-cat" style="color:var(--neon-gold)">Keyboards</div>
+              <h3 class="article-title">Best Mechanical Keyboards for Typing Speed in 2025 (Under ₹5000)</h3>
+              <p class="article-excerpt">A hands-on review of 12 keyboards tested on TypeMaster AI. Red vs Brown vs Blue switches: which is fastest?</p>
+              <div class="article-footer">
+                <span class="article-date">May 18, 2025 · 9 min</span>
+                <span class="article-read">Read →</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination reveal" style="margin-top:40px">
+          <button class="page-btn wide">← Prev</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">4</button>
+          <button class="page-btn">5</button>
+          <span style="align-self:center;color:var(--text-muted)">...</span>
+          <button class="page-btn">48</button>
+          <button class="page-btn wide">Next →</button>
+        </div>
+
+      </main>
+
+      <!-- ── SIDEBAR ── -->
+      <aside class="blog-sidebar">
+
+        <!-- Search -->
+        <div class="glass-card sidebar-widget">
+          <div class="widget-title">🔍 Search Articles</div>
+          <input class="newsletter-input" type="text" placeholder="e.g. Tamil typing, WPM..." />
+          <button class="btn btn-primary w-full" style="justify-content:center;margin-top:8px">Search</button>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="glass-card sidebar-widget" style="background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(168,85,247,0.06));border-color:rgba(0,212,255,0.2)">
+          <div class="widget-title">📬 Weekly Digest</div>
+          <p style="font-size:0.83rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">Get the best typing tips, new features, and leaderboard highlights every Monday.</p>
+          <div class="newsletter-form">
+            <input class="newsletter-input" type="email" placeholder="your@email.com" />
+            <button class="btn btn-primary" style="justify-content:center" onclick="window.TypeMaster.showToast('Subscribed! Check your inbox.','blue')">Subscribe Free →</button>
+          </div>
+          <p class="caption" style="margin-top:10px;text-align:center">12,000+ subscribers · No spam, ever</p>
+        </div>
+
+        <!-- Popular posts -->
+        <div class="glass-card sidebar-widget">
+          <div class="widget-title">🔥 Most Popular</div>
+          <div class="pop-post">
+            <div class="pop-num">01</div>
+            <div>
+              <div class="pop-title">How to Reach 100 WPM in 30 Days</div>
+              <div class="pop-meta">24,812 views · 8 min</div>
+            </div>
+          </div>
+          <div class="pop-post">
+            <div class="pop-num">02</div>
+            <div>
+              <div class="pop-title">Top Typing Tips for Campus Placement</div>
+              <div class="pop-meta">31,220 views · 4 min</div>
+            </div>
+          </div>
+          <div class="pop-post">
+            <div class="pop-num">03</div>
+            <div>
+              <div class="pop-title">Complete Guide to Tamil Typing</div>
+              <div class="pop-meta">17,449 views · 10 min</div>
+            </div>
+          </div>
+          <div class="pop-post">
+            <div class="pop-num">04</div>
+            <div>
+              <div class="pop-title">Why Programmers Need Code Typing</div>
+              <div class="pop-meta">18,340 views · 7 min</div>
+            </div>
+          </div>
+          <div class="pop-post">
+            <div class="pop-num">05</div>
+            <div>
+              <div class="pop-title">Infosys Typing Test: What WPM You Need</div>
+              <div class="pop-meta">28,104 views · 3 min</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tag cloud -->
+        <div class="glass-card sidebar-widget">
+          <div class="widget-title">🏷️ Browse Topics</div>
+          <div class="tag-cloud">
+            <span class="tag">WPM</span>
+            <span class="tag">Touch Typing</span>
+            <span class="tag">Python</span>
+            <span class="tag">Tamil Typing</span>
+            <span class="tag">Placement</span>
+            <span class="tag">QWERTY</span>
+            <span class="tag">Dvorak</span>
+            <span class="tag">Mechanical Keyboard</span>
+            <span class="tag">AI Coach</span>
+            <span class="tag">Productivity</span>
+            <span class="tag">TCS</span>
+            <span class="tag">Infosys</span>
+            <span class="tag">Java Typing</span>
+            <span class="tag">SQL</span>
+            <span class="tag">Accuracy</span>
+            <span class="tag">Streak</span>
+            <span class="tag">TNPSC</span>
+          </div>
+        </div>
+
+        <!-- AdSense square -->
+        <div class="adsense-square">Ad · 300×250</div>
+
+        <!-- CTA -->
+        <div class="glass-card sidebar-widget" style="text-align:center;background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(247,0,255,0.06));border-color:rgba(168,85,247,0.2)">
+          <div style="font-size:2.5rem;margin-bottom:12px">⌨️</div>
+          <div style="font-weight:700;font-size:1rem;margin-bottom:8px">Ready to practise?</div>
+          <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px">Apply what you've read right now.</p>
+          <a href="typing-test.html" class="btn btn-primary w-full" style="justify-content:center">Start Typing Test →</a>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="position:relative;z-index:1;background:var(--bg-deep);border-top:1px solid var(--glass-border);padding:32px 24px;text-align:center">
+    <p style="color:var(--text-muted);font-size:0.83rem">© 2025 TypeMaster AI Blog · <a href="../index.html" style="color:var(--neon-blue)">Home</a> · <a href="typing-test.html" style="color:var(--neon-blue)">Practice</a> · <a href="about.html" style="color:var(--neon-blue)">About Us</a></p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Category filter
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

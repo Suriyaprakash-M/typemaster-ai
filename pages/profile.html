@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — TypeMaster AI</title>
+  <meta name="description" content="View and edit your TypeMaster AI profile, stats, badges, and settings." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; }
+
+    /* ── Profile hero ── */
+    .profile-hero {
+      position: relative;
+      z-index: 1;
+      padding: 48px 0 0;
+    }
+    .profile-banner {
+      height: 220px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(168,85,247,0.2), rgba(247,0,255,0.1));
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 30px,
+        rgba(0,212,255,0.03) 30px, rgba(0,212,255,0.03) 31px
+      );
+    }
+    .profile-banner-edit {
+      position: absolute; bottom: 16px; right: 16px;
+      background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md); padding: 8px 14px;
+      font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+      cursor: pointer; backdrop-filter: blur(8px);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .profile-info-bar {
+      background: rgba(13,13,26,0.95);
+      border: 1px solid var(--glass-border);
+      border-top: none;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      padding: 0 40px 32px;
+      position: relative;
+    }
+    @media(max-width:640px){ .profile-info-bar { padding: 0 20px 24px; } }
+    .profile-avatar-wrap {
+      position: relative;
+      display: inline-block;
+      margin-top: -48px;
+      margin-bottom: 16px;
+    }
+    .profile-avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem; font-weight: 700;
+      border: 4px solid var(--bg-void);
+      box-shadow: var(--glow-blue);
+    }
+    .profile-avatar-edit {
+      position: absolute; bottom: 4px; right: 4px;
+      width: 28px; height: 28px;
+      background: var(--neon-blue); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; cursor: pointer;
+      border: 2px solid var(--bg-void);
+    }
+    .profile-header-row { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .profile-name { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; }
+    .profile-handle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; }
+    .profile-badges-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .profile-rank-tag {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(168,85,247,0.12));
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 100px;
+      font-size: 0.82rem; font-weight: 700;
+    }
+    .profile-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
+    .profile-meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-secondary); }
+
+    /* ── Tabs ── */
+    .profile-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--glass-border); margin: 24px 0 0; overflow-x: auto; }
+    .profile-tab {
+      padding: 12px 20px;
+      background: transparent; border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; border-bottom: 2px solid transparent;
+      white-space: nowrap; transition: all 0.2s;
+    }
+    .profile-tab.active { color: var(--neon-blue); border-bottom-color: var(--neon-blue); }
+    .profile-tab:hover:not(.active) { color: var(--text-primary); }
+
+    /* ── Stats grid ── */
+    .profile-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6,1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media(max-width:900px){ .profile-stats-grid { grid-template-columns: repeat(3,1fr); } }
+    @media(max-width:480px){ .profile-stats-grid { grid-template-columns: repeat(2,1fr); } }
+    .profile-stat-card {
+      padding: 20px 14px;
+      text-align: center;
+    }
+    .profile-stat-val {
+      font-family: var(--font-display);
+      font-size: 1.6rem; font-weight: 700;
+      display: block; line-height: 1;
+    }
+    .profile-stat-lab { font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── History table ── */
+    .history-table { width: 100%; border-collapse: collapse; }
+    .history-table th {
+      text-align: left; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .history-table td {
+      padding: 12px 16px;
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .history-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .wpm-pill {
+      font-family: var(--font-display); font-size: 0.9rem; font-weight: 700;
+      padding: 3px 10px;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 100px;
+      color: var(--neon-blue);
+    }
+
+    /* ── Settings form ── */
+    .settings-section { margin-bottom: 32px; }
+    .settings-label { font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .form-group { margin-bottom: 20px; }
+    .form-label { font-size: 0.83rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 8px; }
+    .form-input {
+      width: 100%; padding: 12px 16px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-body); font-size: 0.92rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: rgba(0,212,255,0.5); }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:600px){ .form-row { grid-template-columns: 1fr; } }
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .toggle-label { font-size: 0.9rem; }
+    .toggle-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+    .toggle {
+      position: relative; width: 44px; height: 24px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px; cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .toggle.on { background: var(--neon-blue); }
+    .toggle::after {
+      content: '';
+      position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: white; border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle.on::after { transform: translateX(20px); }
+
+    /* ── Avatar selector ── */
+    .avatar-grid {
+      display: grid; grid-template-columns: repeat(8,1fr); gap: 8px; margin: 16px 0;
+    }
+    @media(max-width:480px){ .avatar-grid { grid-template-columns: repeat(5,1fr); } }
+    .avatar-option {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; cursor: pointer;
+      border: 2px solid transparent; transition: all 0.2s;
+    }
+    .avatar-option:hover, .avatar-option.selected { border-color: var(--neon-blue); box-shadow: var(--glow-blue); }
+
+    /* ── Pane visibility ── */
+    .profile-pane { display: none; }
+    .profile-pane.active { display: block; }
+
+    /* Content layout */
+    .profile-content { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    @media(max-width:640px){ .profile-content { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html">Practice</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="premium.html">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm active">My Profile</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ PROFILE HERO ═════════════════════════════════════════ -->
+  <section class="profile-hero">
+    <div class="profile-content" style="padding-top:0;padding-bottom:0">
+      <!-- Banner -->
+      <div class="profile-banner">
+        <div class="profile-banner-edit">✏️ Edit Banner</div>
+      </div>
+
+      <!-- Info bar -->
+      <div class="profile-info-bar">
+        <div class="profile-header-row">
+          <div>
+            <div class="profile-avatar-wrap">
+              <div class="profile-avatar" id="profile-avatar-display">😎</div>
+              <div class="profile-avatar-edit" onclick="switchPane('settings')">✏</div>
+            </div>
+            <div class="profile-name">Guest User</div>
+            <div class="profile-handle">@guest_typist · Joined June 2025</div>
+            <div class="profile-badges-row">
+              <div class="profile-rank-tag">
+                <span>⚡</span><span>Intermediate Typist</span>
+              </div>
+              <span class="badge badge-blue">Level <span data-gm="level">1</span></span>
+              <span class="badge badge-gold">🔥 <span data-gm="streak">0</span> day streak</span>
+            </div>
+            <div class="profile-meta">
+              <div class="profile-meta-item">📍 Chennai, India</div>
+              <div class="profile-meta-item">🎓 CSE Student</div>
+              <div class="profile-meta-item">🌐 typemasterai.com/@guest</div>
+            </div>
+          </div>
+          <div class="flex gap-10" style="margin-top:16px;flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" onclick="switchPane('settings')">✏️ Edit Profile</button>
+            <button class="btn btn-ghost btn-sm">📤 Share Profile</button>
+            <a href="typing-test.html" class="btn btn-secondary btn-sm">⌨ Practice</a>
+          </div>
+        </div>
+
+        <!-- Tab bar -->
+        <div class="profile-tabs">
+          <button class="profile-tab active" onclick="switchPane('overview')">📊 Overview</button>
+          <button class="profile-tab" onclick="switchPane('history')">📋 Test History</button>
+          <button class="profile-tab" onclick="switchPane('badges')">🏅 Badges</button>
+          <button class="profile-tab" onclick="switchPane('settings')">⚙️ Settings</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PROFILE CONTENT ══════════════════════════════════════ -->
+  <div class="profile-content">
+
+    <!-- ── OVERVIEW PANE ── -->
+    <div class="profile-pane active" id="pane-overview">
+
+      <!-- Stats grid -->
+      <div class="profile-stats-grid mt-24 reveal">
+        <div class="glass-card profile-stat-card">
+          <span class="profile-stat-val gradient-text counter" data-target="0">0</span>
+          <span class="profile-stat-lab">Best WPM</span>
+        </div>
+        <div class="glass-card profile-stat-card">
+          <span class="profile-stat-val" style="color:var(--neon-cyan)">—%</span>
+          <span class="profile-stat-lab">Avg Accuracy</span>
+        </div>
+        <div class="glass-card profile-stat-card">
+          <span class="profile-stat-val" style="color:var(--neon-purple)"><span class="counter" data-target="0">0</span></span>
+          <span class="profile-stat-lab">Tests Taken</span>
+        </div>
+        <div class="glass-card profile-stat-card">
+          <span class="profile-stat-val" style="color:var(--neon-gold)"><span data-gm="xp">0</span></span>
+          <span class="profile-stat-lab">Total XP</span>
+        </div>
+        <div class="glass-card profile-stat-card">
+          <span class="profile-stat-val" style="color:var(--neon-green)"><span data-gm="coins">0</span></span>
+          <span class="profile-stat-lab">Coins</span>
+        </div>
+        <div class="glass-card profile-stat-card">
+          <span class="profile-stat-val" style="color:var(--neon-pink)">0</span>
+          <span class="profile-stat-lab">Battle Wins</span>
+        </div>
+      </div>
+
+      <!-- XP / Level card -->
+      <div class="glass-card reveal" style="padding:28px;margin-bottom:20px">
+        <div class="flex justify-between items-center mb-16" style="flex-wrap:wrap;gap:12px">
+          <div>
+            <div class="heading-md">Level Progress</div>
+            <div class="caption mt-4">Level <span data-gm="level">1</span> → Level <span id="next-level">2</span></div>
+          </div>
+          <div class="flex gap-20">
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--neon-blue)" data-gm="xp">0</div>
+              <div class="caption">Current XP</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--text-muted)">500</div>
+              <div class="caption">Next Level</div>
+            </div>
+          </div>
+        </div>
+        <div class="xp-bar-wrap" style="height:12px"><div class="xp-bar-fill" data-gm="xp-bar" style="width:0%"></div></div>
+      </div>
+
+      <!-- Two col: recent badges + AI feedback -->
+      <div class="grid-2 reveal" style="margin-bottom:20px">
+        <div class="glass-card" style="padding:24px">
+          <div class="heading-md mb-16">🏅 Recent Badges</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" id="profile-badge-display">
+            <div class="glass-card achievement" style="padding:14px 8px;opacity:0.3">
+              <div class="achievement-icon" style="filter:grayscale(1);width:44px;height:44px;font-size:1.3rem">🚀</div>
+              <div class="achievement-name" style="font-size:0.72rem">Locked</div>
+            </div>
+            <div class="glass-card achievement" style="padding:14px 8px;opacity:0.3">
+              <div class="achievement-icon" style="filter:grayscale(1);width:44px;height:44px;font-size:1.3rem">🔥</div>
+              <div class="achievement-name" style="font-size:0.72rem">Locked</div>
+            </div>
+            <div class="glass-card achievement" style="padding:14px 8px;opacity:0.3">
+              <div class="achievement-icon" style="filter:grayscale(1);width:44px;height:44px;font-size:1.3rem">💎</div>
+              <div class="achievement-name" style="font-size:0.72rem">Locked</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm mt-16" onclick="switchPane('badges')">View All →</button>
+        </div>
+
+        <div class="glass-card" style="padding:24px;background:rgba(168,85,247,0.05);border-color:rgba(168,85,247,0.2)">
+          <div class="flex items-center gap-10 mb-16">
+            <span style="font-size:1.4rem">🤖</span>
+            <div class="heading-md">AI Coach Summary</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:0.88rem;color:var(--text-secondary);line-height:1.7;padding:12px;background:rgba(168,85,247,0.06);border-radius:10px">
+              Complete your first test to receive a personalised AI analysis with specific improvement tips, weak-key identification, and a custom training plan.
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="flex justify-between">
+                <span style="font-size:0.83rem">Overall skill</span>
+                <span style="font-size:0.83rem;color:var(--neon-purple)">Beginner</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,var(--neon-purple),var(--neon-pink))"></div></div>
+            </div>
+          </div>
+          <a href="typing-test.html" class="btn btn-primary btn-sm mt-16">Start Training →</a>
+        </div>
+      </div>
+
+      <!-- Mode breakdown mini -->
+      <div class="glass-card reveal" style="padding:24px;margin-bottom:20px">
+        <div class="heading-md mb-20">📂 Mode Statistics</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">
+          <div style="padding:14px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.12);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.4rem;margin-bottom:6px">⚡</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">Standard</div>
+            <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--neon-blue)">0</div>
+            <div class="caption">tests</div>
+          </div>
+          <div style="padding:14px;background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.12);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.4rem;margin-bottom:6px">💻</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">Code</div>
+            <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--neon-purple)">0</div>
+            <div class="caption">tests</div>
+          </div>
+          <div style="padding:14px;background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.12);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.4rem;margin-bottom:6px">🎯</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">Placement</div>
+            <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--neon-gold)">0</div>
+            <div class="caption">tests</div>
+          </div>
+          <div style="padding:14px;background:rgba(6,255,212,0.05);border:1px solid rgba(6,255,212,0.12);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.4rem;margin-bottom:6px">🌏</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">Tamil</div>
+            <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--neon-cyan)">0</div>
+            <div class="caption">tests</div>
+          </div>
+          <div style="padding:14px;background:rgba(57,255,20,0.05);border:1px solid rgba(57,255,20,0.1);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.4rem;margin-bottom:6px">⚔️</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">Battle</div>
+            <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--neon-green)">0</div>
+            <div class="caption">wins</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AdSense -->
+      <div class="adsense-horizontal reveal">Advertisement · 728×90</div>
+    </div>
+
+    <!-- ── HISTORY PANE ── -->
+    <div class="profile-pane" id="pane-history">
+      <div class="glass-card reveal" style="padding:24px;margin-top:24px;overflow-x:auto">
+        <div class="flex justify-between items-center mb-20" style="flex-wrap:wrap;gap:12px">
+          <div class="heading-md">📋 Test History</div>
+          <div class="flex gap-10">
+            <select class="form-input" style="width:auto;padding:8px 12px;font-size:0.85rem">
+              <option>All Modes</option>
+              <option>Standard</option>
+              <option>Code</option>
+              <option>Placement</option>
+              <option>Tamil</option>
+              <option>Battle</option>
+            </select>
+            <button class="btn btn-ghost btn-sm">Export CSV</button>
+          </div>
+        </div>
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date & Time</th>
+              <th>Mode</th>
+              <th>WPM</th>
+              <th>Accuracy</th>
+              <th>Duration</th>
+              <th>Errors</th>
+              <th>XP</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr>
+              <td colspan="8" style="text-align:center;color:var(--text-muted);padding:40px">
+                No test history yet. <a href="typing-test.html" style="color:var(--neon-blue)">Take your first test →</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="flex justify-center mt-20">
+          <div class="flex gap-6">
+            <button class="btn btn-secondary btn-sm">← Prev</button>
+            <button class="btn btn-ghost btn-sm" style="min-width:40px">1</button>
+            <button class="btn btn-secondary btn-sm">Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BADGES PANE ── -->
+    <div class="profile-pane" id="pane-badges">
+      <div class="glass-card reveal" style="padding:28px;margin-top:24px">
+        <div class="flex justify-between items-center mb-24" style="flex-wrap:wrap;gap:12px">
+          <div>
+            <div class="heading-md">🏅 Achievement Badges</div>
+            <div class="caption mt-4">0 of 40 badges unlocked</div>
+          </div>
+          <div class="flex gap-8">
+            <button class="btn btn-ghost btn-sm active-filter">All</button>
+            <button class="btn btn-ghost btn-sm">Unlocked</button>
+            <button class="btn btn-ghost btn-sm">Locked</button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:14px">
+          <!-- Sample unlocked -->
+          <!-- All locked for new user -->
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">🚀</div>
+            <div class="achievement-name">Century Club</div>
+            <div class="achievement-desc">Reach 100 WPM</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">🔥</div>
+            <div class="achievement-name">On Fire</div>
+            <div class="achievement-desc">30-day streak</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">💎</div>
+            <div class="achievement-name">Perfectionist</div>
+            <div class="achievement-desc">100% accuracy</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">⚔️</div>
+            <div class="achievement-name">Arena King</div>
+            <div class="achievement-desc">Win 10 battles</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">🌏</div>
+            <div class="achievement-name">Polyglot</div>
+            <div class="achievement-desc">Tamil + English</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">💻</div>
+            <div class="achievement-name">Code Ninja</div>
+            <div class="achievement-desc">50 code tests</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">🌙</div>
+            <div class="achievement-name">Night Owl</div>
+            <div class="achievement-desc">Midnight practice</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">⚡</div>
+            <div class="achievement-name">Speed Demon</div>
+            <div class="achievement-desc">50 WPM</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">🎯</div>
+            <div class="achievement-name">Dedicated</div>
+            <div class="achievement-desc">10 tests</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">📚</div>
+            <div class="achievement-name">Scholar</div>
+            <div class="achievement-desc">50 tests</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">🌟</div>
+            <div class="achievement-name">Legend</div>
+            <div class="achievement-desc">Level 50</div>
+          </div>
+          <div class="glass-card achievement" style="padding:18px 10px;opacity:0.35">
+            <div class="achievement-icon" style="filter:grayscale(1)">🏆</div>
+            <div class="achievement-name">Champion</div>
+            <div class="achievement-desc">Leaderboard #1</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SETTINGS PANE ── -->
+    <div class="profile-pane" id="pane-settings">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px" class="reveal">
+
+        <!-- Profile settings -->
+        <div class="glass-card" style="padding:28px">
+          <div class="settings-label">👤 Profile Information</div>
+
+          <!-- Avatar selector -->
+          <div class="form-group">
+            <div class="form-label">Choose Avatar</div>
+            <div class="avatar-grid">
+              <div class="avatar-option" style="background:linear-gradient(135deg,#00d4ff,#a855f7)" onclick="selectAvatar('😎')">😎</div>
+              <div class="avatar-option" style="background:linear-gradient(135deg,#a855f7,#f700ff)" onclick="selectAvatar('🤖')">🤖</div>
+              <div class="avatar-option" style="background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000" onclick="selectAvatar('🦁')">🦁</div>
+              <div class="avatar-option" style="background:linear-gradient(135deg,#06ffd4,#00d4ff)" onclick="selectAvatar('🐉')">🐉</div>
+              <div class="avatar-option" style="background:linear-gradient(135deg,#39ff14,#06ffd4)" onclick="selectAvatar('🦊')">🦊</div>
+              <div class="avatar-option" style="background:linear-gradient(135deg,#f700ff,#a855f7)" onclick="selectAvatar('🐺')">🐺</div>
+              <div class="avatar-option" style="background:linear-gradient(135deg,#ff006e,#f700ff)" onclick="selectAvatar('🦅')">🦅</div>
+              <div class="avatar-option" style="background:linear-gradient(135deg,#00d4ff,#39ff14)" onclick="selectAvatar('🐬')">🐬</div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Display Name</label>
+              <input class="form-input" type="text" placeholder="Your name" value="Guest User" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Username</label>
+              <input class="form-input" type="text" placeholder="@username" value="@guest_typist" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="your@email.com" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <input class="form-input" type="text" placeholder="City, Country" value="Chennai, India" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Occupation</label>
+              <select class="form-input">
+                <option>Student</option>
+                <option>Software Engineer</option>
+                <option>Content Writer</option>
+                <option>Data Analyst</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Bio (optional)</label>
+            <textarea class="form-input" style="min-height:80px;resize:vertical" placeholder="Tell others about yourself..."></textarea>
+          </div>
+
+          <button class="btn btn-primary w-full" style="justify-content:center" onclick="window.TypeMaster.showToast('Profile saved!', 'blue')">Save Changes</button>
+        </div>
+
+        <!-- Preferences -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div class="glass-card" style="padding:28px">
+            <div class="settings-label">⚙️ Typing Preferences</div>
+
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Sound Effects</div>
+                <div class="toggle-desc">Play sounds on correct/wrong keystrokes</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Auto-scroll Text</div>
+                <div class="toggle-desc">Automatically scroll text as you type</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Show WPM Live</div>
+                <div class="toggle-desc">Display real-time WPM counter</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Show Error Highlight</div>
+                <div class="toggle-desc">Highlight wrong characters in red</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Blind Mode</div>
+                <div class="toggle-desc">Hide typed text for extra challenge</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Stop on Error</div>
+                <div class="toggle-desc">Block progress until error is corrected</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+
+            <div class="form-group" style="margin-top:20px">
+              <label class="form-label">Font Size</label>
+              <select class="form-input">
+                <option>Small (14px)</option>
+                <option selected>Medium (18px)</option>
+                <option>Large (22px)</option>
+                <option>Extra Large (26px)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Caret Style</label>
+              <select class="form-input">
+                <option selected>Line (|)</option>
+                <option>Underline (_)</option>
+                <option>Block (█)</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary w-full" style="justify-content:center;margin-top:8px" onclick="window.TypeMaster.showToast('Preferences saved!', 'blue')">Save Preferences</button>
+          </div>
+
+          <!-- Notifications -->
+          <div class="glass-card" style="padding:28px">
+            <div class="settings-label">🔔 Notifications</div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Daily Reminder</div>
+                <div class="toggle-desc">Remind me to practice every day</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Badge Alerts</div>
+                <div class="toggle-desc">Notify when I earn a new badge</div>
+              </div>
+              <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Leaderboard Updates</div>
+                <div class="toggle-desc">Alert when my rank changes</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+          </div>
+
+          <!-- Danger zone -->
+          <div class="glass-card" style="padding:28px;border-color:rgba(247,0,255,0.2)">
+            <div class="settings-label" style="color:var(--neon-pink)">⚠️ Danger Zone</div>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px">These actions are permanent and cannot be undone.</p>
+            <div class="flex gap-10">
+              <button class="btn btn-sm" style="background:rgba(247,0,255,0.1);border:1px solid rgba(247,0,255,0.3);color:var(--neon-pink)">Reset Progress</button>
+              <button class="btn btn-sm" style="background:rgba(247,0,255,0.15);border:1px solid rgba(247,0,255,0.4);color:var(--neon-pink)">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    function switchPane(id) {
+      document.querySelectorAll('.profile-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+      const pane = document.getElementById('pane-' + id);
+      if (pane) pane.classList.add('active');
+      document.querySelectorAll('.profile-tab').forEach(t => {
+        if (t.getAttribute('onclick')?.includes(id)) t.classList.add('active');
+      });
+    }
+
+    function selectAvatar(emoji) {
+      document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
+      event.target.closest('.avatar-option').classList.add('selected');
+      document.getElementById('profile-avatar-display').textContent = emoji;
+    }
+  </script>
+</body>
+</html>

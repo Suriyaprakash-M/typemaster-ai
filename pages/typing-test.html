@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Typing Test — TypeMaster AI | WPM Speed Test, Code Typing, Tamil Mode</title>
+  <meta name="description" content="Take a free typing speed test. Choose from Standard, Code, Placement, Tamil, Battle Arena and 8 more modes. AI coaching included." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://typemasterai.com/pages/typing-test.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; }
+
+    /* ── Page layout ── */
+    .test-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr 260px;
+      gap: 24px;
+      padding: 32px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: calc(100vh - 68px);
+    }
+    @media(max-width:1100px){ .test-layout { grid-template-columns: 1fr; } .sidebar-left,.sidebar-right{ display:none; } }
+
+    /* ── Sidebar ── */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .sidebar-card { padding: 20px; }
+
+    /* ── Results overlay ── */
+    .results-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(3,3,8,0.85);
+      backdrop-filter: blur(16px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s;
+    }
+    .results-overlay.visible { opacity: 1; pointer-events: all; }
+    .results-card {
+      width: 100%; max-width: 680px;
+      margin: 24px;
+      padding: 48px;
+      background: rgba(13,13,26,0.95);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: var(--radius-xl);
+      animation: fadeInUp 0.5s var(--transition) both;
+    }
+    .results-wpm {
+      font-family: var(--font-display);
+      font-size: 6rem;
+      font-weight: 900;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .result-stat {
+      padding: 20px 12px;
+      text-align: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-md);
+    }
+    .result-stat-value {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      display: block;
+      color: var(--neon-cyan);
+    }
+    .result-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* ── AI coach panel ── */
+    .ai-coach-panel {
+      background: rgba(168,85,247,0.06);
+      border: 1px solid rgba(168,85,247,0.2);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-top: 24px;
+    }
+    .ai-tip {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .ai-tip:last-child { border-bottom: none; padding-bottom: 0; }
+    .ai-tip-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+    .ai-tip-text { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── Keyboard heatmap ── */
+    .keyboard-wrap {
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+    }
+    .kb-row { display: flex; gap: 4px; margin-bottom: 4px; justify-content: center; }
+    .kb-key {
+      min-width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .kb-key.hot { background: rgba(247,0,255,0.25); border-color: rgba(247,0,255,0.4); color: var(--neon-pink); }
+    .kb-key.warm { background: rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.3); color: var(--neon-gold); }
+    .kb-key.cool { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.2); color: var(--neon-blue); }
+    .kb-key.wide { min-width: 60px; }
+    .kb-key.wider { min-width: 80px; }
+    .kb-key.widest { min-width: 160px; }
+
+    /* ── Battle arena ── */
+    .battle-track {
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .battle-player {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+    }
+    .battle-progress { flex: 1; }
+    .battle-car { font-size: 1.2rem; }
+
+    /* ── Timer ring ── */
+    .timer-ring-wrap {
+      position: relative; width: 90px; height: 90px;
+    }
+    .timer-ring-wrap svg { transform: rotate(-90deg); }
+    .timer-ring-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 6; }
+    .timer-ring-fill {
+      fill: none; stroke: url(#timerGrad); stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 245;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+    }
+    .timer-ring-text {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
+      color: var(--neon-blue);
+    }
+
+    /* ── Language toggle ── */
+    .lang-toggle {
+      display: flex; gap: 6px;
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      border: 1px solid var(--glass-border);
+    }
+    .lang-btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(168,85,247,0.2));
+      color: var(--text-primary);
+      border: 1px solid rgba(0,212,255,0.25);
+    }
+
+    /* ── Notification earn ── */
+    .earn-pop {
+      position: fixed; top: 90px; right: 24px; z-index: 999;
+      padding: 14px 20px;
+      background: rgba(13,13,26,0.95);
+      border: 1px solid rgba(0,212,255,0.3);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.88rem; font-weight: 600;
+      transform: translateX(120%);
+      transition: transform 0.4s var(--transition);
+      backdrop-filter: blur(16px);
+    }
+    .earn-pop.show { transform: translateX(0); }
+
+    /* ── Sub-mode selector (code languages etc) ── */
+    .submode-row {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;
+    }
+    .submode-btn {
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary);
+      font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .submode-btn.active {
+      background: rgba(0,212,255,0.12);
+      border-color: rgba(0,212,255,0.35);
+      color: var(--neon-blue);
+    }
+    .submode-btn:hover:not(.active) { color: var(--text-primary); border-color: rgba(255,255,255,0.2); }
+
+    /* ── Duration pills ── */
+    .duration-row { display: flex; gap: 6px; }
+    .dur-btn {
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary);
+      font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .dur-btn.active { background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.4); color: var(--neon-purple); }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- ══ NAV ══════════════════════════════════════════════════ -->
+  <nav class="nav" role="navigation">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html" class="active">Practice</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="premium.html">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ EARN POP ═══════════════════════════════════════════ -->
+  <div class="earn-pop" id="earn-pop">
+    <span style="font-size:1.3rem">⚡</span>
+    <span id="earn-pop-text">+120 XP · +24 Coins</span>
+  </div>
+
+  <!-- ══ MAIN TEST LAYOUT ════════════════════════════════════ -->
+  <div class="test-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar sidebar-left">
+      <!-- Player stats -->
+      <div class="glass-card sidebar-card">
+        <div class="flex items-center gap-12 mb-16">
+          <div class="avatar-circle" style="width:48px;height:48px;font-size:1.2rem">U</div>
+          <div>
+            <div style="font-weight:700;font-size:0.95rem">Guest User</div>
+            <div class="flex items-center gap-6 mt-4">
+              <span class="badge badge-blue" style="font-size:0.68rem">Level <span data-gm="level">1</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-8" style="display:flex;justify-content:space-between">
+          <span class="caption">XP Progress</span>
+          <span class="caption" style="color:var(--neon-blue)"><span data-gm="xp">0</span> XP</span>
+        </div>
+        <div class="xp-bar-wrap"><div class="xp-bar-fill" data-gm="xp-bar" style="width:0%"></div></div>
+        <div class="flex justify-between mt-16">
+          <div style="text-align:center">
+            <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--neon-gold)" data-gm="coins">0</div>
+            <div class="caption">Coins</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--neon-blue)" data-gm="streak">0</div>
+            <div class="caption">Streak 🔥</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Today's missions -->
+      <div class="glass-card sidebar-card">
+        <div class="heading-md mb-16" style="font-size:0.9rem">📋 Today's Missions</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div>
+            <div class="flex justify-between mb-6">
+              <span style="font-size:0.82rem">Complete 3 tests</span>
+              <span style="font-size:0.82rem;color:var(--neon-blue)">1/3</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:33%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-6">
+              <span style="font-size:0.82rem">Reach 70 WPM</span>
+              <span style="font-size:0.82rem;color:var(--neon-purple)">0/1</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0%;background:linear-gradient(90deg,var(--neon-purple),var(--neon-pink))"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-6">
+              <span style="font-size:0.82rem">Try Code Mode</span>
+              <span style="font-size:0.82rem;color:var(--neon-gold)">0/1</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0%;background:linear-gradient(90deg,var(--neon-gold),#ff8c00)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick stats -->
+      <div class="glass-card sidebar-card">
+        <div class="heading-md mb-16" style="font-size:0.9rem">📊 Session Stats</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="flex justify-between">
+            <span class="caption">Best WPM today</span>
+            <span style="font-size:0.88rem;font-weight:600;color:var(--neon-blue)" id="session-best">—</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="caption">Tests taken</span>
+            <span style="font-size:0.88rem;font-weight:600" id="session-count">0</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="caption">Avg accuracy</span>
+            <span style="font-size:0.88rem;font-weight:600;color:var(--neon-cyan)" id="session-acc">—</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="caption">XP earned today</span>
+            <span style="font-size:0.88rem;font-weight:600;color:var(--neon-gold)" data-gm="xp">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard heatmap -->
+      <div class="glass-card sidebar-card">
+        <div class="heading-md mb-12" style="font-size:0.9rem">⌨ Error Heatmap</div>
+        <div class="keyboard-wrap" id="heatmap-wrap">
+          <div class="kb-row">
+            <div class="kb-key">q</div><div class="kb-key cool">w</div><div class="kb-key">e</div>
+            <div class="kb-key hot">r</div><div class="kb-key">t</div><div class="kb-key">y</div>
+            <div class="kb-key">u</div><div class="kb-key">i</div><div class="kb-key">o</div><div class="kb-key">p</div>
+          </div>
+          <div class="kb-row">
+            <div class="kb-key">a</div><div class="kb-key warm">s</div><div class="kb-key">d</div>
+            <div class="kb-key hot">f</div><div class="kb-key">g</div><div class="kb-key">h</div>
+            <div class="kb-key">j</div><div class="kb-key">k</div><div class="kb-key">l</div>
+          </div>
+          <div class="kb-row">
+            <div class="kb-key">z</div><div class="kb-key">x</div><div class="kb-key">c</div>
+            <div class="kb-key warm">v</div><div class="kb-key">b</div><div class="kb-key">n</div>
+            <div class="kb-key">m</div>
+          </div>
+          <div class="kb-row">
+            <div class="kb-key widest">space</div>
+          </div>
+        </div>
+        <div class="flex gap-12 mt-12" style="justify-content:center">
+          <div class="flex items-center gap-6"><div style="width:10px;height:10px;border-radius:3px;background:rgba(247,0,255,0.5)"></div><span class="caption">High errors</span></div>
+          <div class="flex items-center gap-6"><div style="width:10px;height:10px;border-radius:3px;background:rgba(255,215,0,0.4)"></div><span class="caption">Some errors</span></div>
+          <div class="flex items-center gap-6"><div style="width:10px;height:10px;border-radius:3px;background:rgba(0,212,255,0.3)"></div><span class="caption">Good</span></div>
+        </div>
+      </div>
+
+      <!-- AdSense -->
+      <div class="adsense-square">Ad · 300×250</div>
+    </aside>
+
+    <!-- ══ MAIN CONTENT ══════════════════════════════════════ -->
+    <main style="display:flex;flex-direction:column;gap:20px">
+
+      <!-- Mode selector -->
+      <div class="glass-card" style="padding:20px">
+        <div class="mode-tabs" id="mode-tabs">
+          <button class="mode-tab active" data-mode="standard">⚡ Standard</button>
+          <button class="mode-tab" data-mode="code">💻 Code</button>
+          <button class="mode-tab" data-mode="placement">🎯 Placement</button>
+          <button class="mode-tab" data-mode="engineering">🎓 Engineering</button>
+          <button class="mode-tab" data-mode="tamil">🌏 Tamil</button>
+          <button class="mode-tab" data-mode="battle">⚔️ Battle</button>
+          <button class="mode-tab" data-mode="zen">🧘 Zen</button>
+          <button class="mode-tab" data-mode="custom">📝 Custom</button>
+        </div>
+
+        <!-- Sub-mode rows (conditionally shown) -->
+        <div id="submode-code" class="submode-row" style="display:none">
+          <button class="submode-btn active" data-lang="python">🐍 Python</button>
+          <button class="submode-btn" data-lang="java">☕ Java</button>
+          <button class="submode-btn" data-lang="javascript">🟨 JavaScript</button>
+          <button class="submode-btn" data-lang="c">⚙️ C</button>
+          <button class="submode-btn" data-lang="sql">🗄️ SQL</button>
+        </div>
+        <div id="submode-engineering" class="submode-row" style="display:none">
+          <button class="submode-btn active" data-branch="cse">💻 CSE</button>
+          <button class="submode-btn" data-branch="ece">📡 ECE</button>
+          <button class="submode-btn" data-branch="eee">⚡ EEE</button>
+          <button class="submode-btn" data-branch="mech">⚙️ MECH</button>
+          <button class="submode-btn" data-branch="civil">🏗️ Civil</button>
+        </div>
+        <div id="submode-tamil" style="display:none;margin-top:12px">
+          <div class="lang-toggle">
+            <button class="lang-btn active" id="lang-english">English</button>
+            <button class="lang-btn" id="lang-tamil">தமிழ்</button>
+          </div>
+        </div>
+
+        <!-- Duration & options row -->
+        <div class="flex items-center gap-16 mt-16" style="flex-wrap:wrap">
+          <div>
+            <span class="caption" style="display:block;margin-bottom:6px">Duration</span>
+            <div class="duration-row">
+              <button class="dur-btn" data-dur="15">15s</button>
+              <button class="dur-btn" data-dur="30">30s</button>
+              <button class="dur-btn active" data-dur="60">60s</button>
+              <button class="dur-btn" data-dur="120">2m</button>
+              <button class="dur-btn" data-dur="300">5m</button>
+            </div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer">
+              <input type="checkbox" id="chk-punctuation" style="accent-color:var(--neon-blue)" /> Punctuation
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer">
+              <input type="checkbox" id="chk-numbers" style="accent-color:var(--neon-blue)" /> Numbers
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.85rem;cursor:pointer">
+              <input type="checkbox" id="chk-sound" style="accent-color:var(--neon-blue)" /> Sound
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom text area (hidden by default) -->
+      <div id="custom-text-area" class="glass-card" style="padding:20px;display:none">
+        <label style="font-size:0.88rem;font-weight:600;display:block;margin-bottom:10px">Paste your custom text below:</label>
+        <textarea id="custom-input" style="width:100%;min-height:100px;background:rgba(0,0,0,0.3);border:1px solid var(--glass-border);border-radius:10px;padding:14px;color:var(--text-primary);font-family:var(--font-body);font-size:0.92rem;resize:vertical;outline:none" placeholder="Paste any text here — article, notes, code, anything..."></textarea>
+        <button id="btn-load-custom" class="btn btn-primary btn-sm" style="margin-top:10px">Load Text →</button>
+      </div>
+
+      <!-- Battle arena (hidden by default) -->
+      <div id="battle-arena" class="glass-card" style="padding:24px;display:none">
+        <div class="flex justify-between items-center mb-20">
+          <h3 class="heading-md">⚔️ Battle Arena — Room #4821</h3>
+          <div class="flex gap-8">
+            <span class="badge badge-green"><span class="notif-dot"></span> Live</span>
+            <button class="btn btn-ghost btn-sm">Share Link</button>
+          </div>
+        </div>
+        <div id="battle-tracks">
+          <div class="battle-track">
+            <div class="battle-player">
+              <div class="avatar-circle" style="width:32px;height:32px;font-size:0.8rem">YOU</div>
+              <span style="font-size:0.88rem;font-weight:600;min-width:100px">You</span>
+              <div class="battle-progress">
+                <div class="progress-bar"><div class="progress-fill" id="battle-prog-you" style="width:0%"></div></div>
+              </div>
+              <span class="battle-car">🚗</span>
+              <span style="font-family:var(--font-display);font-size:0.9rem;color:var(--neon-blue);min-width:40px;text-align:right" id="battle-wpm-you">0</span>
+            </div>
+          </div>
+          <div class="battle-track">
+            <div class="battle-player">
+              <div class="avatar-circle" style="width:32px;height:32px;font-size:0.8rem;background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink))">SK</div>
+              <span style="font-size:0.88rem;font-weight:600;min-width:100px">Siddharth K.</span>
+              <div class="battle-progress">
+                <div class="progress-bar"><div class="progress-fill" id="battle-prog-1" style="width:0%;background:linear-gradient(90deg,var(--neon-purple),var(--neon-pink))"></div></div>
+              </div>
+              <span class="battle-car">🏎️</span>
+              <span style="font-family:var(--font-display);font-size:0.9rem;color:var(--neon-purple);min-width:40px;text-align:right" id="battle-wpm-1">0</span>
+            </div>
+          </div>
+          <div class="battle-track">
+            <div class="battle-player">
+              <div class="avatar-circle" style="width:32px;height:32px;font-size:0.8rem;background:linear-gradient(135deg,var(--neon-gold),#ff8c00);color:#000">RM</div>
+              <span style="font-size:0.88rem;font-weight:600;min-width:100px">Rithika M.</span>
+              <div class="battle-progress">
+                <div class="progress-bar"><div class="progress-fill" id="battle-prog-2" style="width:0%;background:linear-gradient(90deg,var(--neon-gold),#ff8c00)"></div></div>
+              </div>
+              <span class="battle-car">🚕</span>
+              <span style="font-family:var(--font-display);font-size:0.9rem;color:var(--neon-gold);min-width:40px;text-align:right" id="battle-wpm-2">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing area -->
+      <div class="typing-container glass-card" id="typing-zone">
+        <!-- Top bar: live stats + timer -->
+        <div class="flex items-center justify-between mb-24" style="flex-wrap:wrap;gap:16px">
+          <div class="typing-meta">
+            <div class="typing-stat">
+              <span class="typing-stat-value" id="stat-wpm">0</span>
+              <span class="typing-stat-label">WPM</span>
+            </div>
+            <div style="width:1px;height:40px;background:rgba(255,255,255,0.08)"></div>
+            <div class="typing-stat">
+              <span class="typing-stat-value" style="color:var(--neon-cyan)" id="stat-acc">100%</span>
+              <span class="typing-stat-label">Accuracy</span>
+            </div>
+            <div style="width:1px;height:40px;background:rgba(255,255,255,0.08)"></div>
+            <div class="typing-stat">
+              <span class="typing-stat-value" style="color:var(--neon-pink)" id="stat-err">0</span>
+              <span class="typing-stat-label">Errors</span>
+            </div>
+          </div>
+
+          <!-- Timer ring -->
+          <div class="timer-ring-wrap">
+            <svg width="90" height="90" viewBox="0 0 90 90">
+              <defs>
+                <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#00d4ff"/>
+                  <stop offset="100%" stop-color="#a855f7"/>
+                </linearGradient>
+              </defs>
+              <circle class="timer-ring-bg" cx="45" cy="45" r="39"/>
+              <circle class="timer-ring-fill" id="timer-ring" cx="45" cy="45" r="39"/>
+            </svg>
+            <div class="timer-ring-text" id="stat-timer">60</div>
+          </div>
+        </div>
+
+        <!-- Text display -->
+        <div class="typing-text-display" id="typing-display" tabindex="0" role="textbox" aria-label="Typing text"></div>
+        <input class="typing-input" id="typing-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-hidden="true" />
+
+        <!-- Bottom controls -->
+        <div class="flex items-center justify-between mt-24" style="flex-wrap:wrap;gap:12px">
+          <div class="flex gap-10">
+            <button id="btn-restart" class="btn btn-ghost btn-sm">↺ Restart</button>
+            <button id="btn-next" class="btn btn-secondary btn-sm">Next Text →</button>
+          </div>
+          <div class="flex items-center gap-12">
+            <span style="font-size:0.8rem;color:var(--text-muted)">Click text area or press any key to start</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Coach inline panel -->
+      <div class="ai-coach-panel" id="ai-coach-inline" style="display:none">
+        <div class="flex items-center gap-12 mb-16">
+          <span style="font-size:1.5rem">🤖</span>
+          <div>
+            <div style="font-weight:700;font-size:1rem">AI Typing Coach Analysis</div>
+            <div class="caption">Based on your last test</div>
+          </div>
+          <button id="btn-close-coach" style="margin-left:auto;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer">✕</button>
+        </div>
+        <div id="ai-tips-list"></div>
+      </div>
+
+      <!-- Quote of the session -->
+      <div class="glass-card" style="padding:24px;display:flex;gap:20px;align-items:center" id="quote-card">
+        <div style="font-size:2rem;flex-shrink:0">💡</div>
+        <div>
+          <p style="font-size:0.95rem;font-style:italic;color:var(--text-secondary);line-height:1.7" id="quote-text">"Speed is a byproduct of mastery."</p>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px" id="quote-author">— Anonymous</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="sidebar sidebar-right">
+      <!-- AI coach summary -->
+      <div class="glass-card sidebar-card" style="background:rgba(168,85,247,0.05);border-color:rgba(168,85,247,0.2)">
+        <div class="flex items-center gap-10 mb-16">
+          <span style="font-size:1.4rem">🤖</span>
+          <div style="font-weight:700;font-size:0.9rem">AI Coach</div>
+          <span class="badge badge-purple" style="margin-left:auto;font-size:0.65rem">LIVE</span>
+        </div>
+        <div style="font-size:0.83rem;color:var(--text-secondary);line-height:1.7" id="coach-sidebar-tip">
+          Complete a test to get your personalised AI coaching tips and improvement plan.
+        </div>
+        <div class="progress-bar mt-16" style="height:4px">
+          <div class="progress-fill" style="width:0%;background:linear-gradient(90deg,var(--neon-purple),var(--neon-pink))" id="coach-level-bar"></div>
+        </div>
+        <div class="flex justify-between mt-8">
+          <span class="caption">Skill level</span>
+          <span class="caption" style="color:var(--neon-purple)" id="coach-skill">Beginner</span>
+        </div>
+      </div>
+
+      <!-- Leaderboard mini -->
+      <div class="glass-card sidebar-card">
+        <div class="heading-md mb-12" style="font-size:0.9rem">🏆 Today's Top</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="flex items-center gap-10">
+            <span style="color:var(--neon-gold);font-size:0.85rem;font-weight:700;width:18px">1</span>
+            <div class="avatar-circle" style="width:28px;height:28px;font-size:0.7rem;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000">SK</div>
+            <span style="font-size:0.82rem;font-weight:600;flex:1">Siddharth K.</span>
+            <span style="font-family:var(--font-display);font-size:0.9rem;color:var(--neon-blue)">148</span>
+          </div>
+          <div class="flex items-center gap-10">
+            <span style="color:#C0C0C0;font-size:0.85rem;font-weight:700;width:18px">2</span>
+            <div class="avatar-circle" style="width:28px;height:28px;font-size:0.7rem">RM</div>
+            <span style="font-size:0.82rem;font-weight:600;flex:1">Rithika M.</span>
+            <span style="font-family:var(--font-display);font-size:0.9rem;color:var(--neon-blue)">141</span>
+          </div>
+          <div class="flex items-center gap-10">
+            <span style="color:#CD7F32;font-size:0.85rem;font-weight:700;width:18px">3</span>
+            <div class="avatar-circle" style="width:28px;height:28px;font-size:0.7rem;background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink))">AK</div>
+            <span style="font-size:0.82rem;font-weight:600;flex:1">Aryan K.</span>
+            <span style="font-family:var(--font-display);font-size:0.9rem;color:var(--neon-blue)">138</span>
+          </div>
+          <div class="flex items-center gap-10">
+            <span style="color:var(--text-muted);font-size:0.85rem;font-weight:700;width:18px">—</span>
+            <div class="avatar-circle" style="width:28px;height:28px;font-size:0.7rem;background:rgba(255,255,255,0.1)">U</div>
+            <span style="font-size:0.82rem;font-weight:600;flex:1;color:var(--neon-blue)">You</span>
+            <span style="font-family:var(--font-display);font-size:0.9rem;color:var(--text-muted)">—</span>
+          </div>
+        </div>
+        <a href="leaderboard.html" class="btn btn-ghost btn-sm w-full" style="justify-content:center;margin-top:14px">Full Board →</a>
+      </div>
+
+      <!-- Recent badges -->
+      <div class="glass-card sidebar-card">
+        <div class="heading-md mb-12" style="font-size:0.9rem">🏅 Recent Badges</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="recent-badges">
+          <div class="glass-card achievement" style="padding:12px 8px;opacity:0.35">
+            <div class="achievement-icon" style="width:40px;height:40px;font-size:1.2rem;filter:grayscale(1)">🚀</div>
+            <div class="achievement-name" style="font-size:0.68rem">Locked</div>
+          </div>
+          <div class="glass-card achievement" style="padding:12px 8px;opacity:0.35">
+            <div class="achievement-icon" style="width:40px;height:40px;font-size:1.2rem;filter:grayscale(1)">🔥</div>
+            <div class="achievement-name" style="font-size:0.68rem">Locked</div>
+          </div>
+          <div class="glass-card achievement" style="padding:12px 8px;opacity:0.35">
+            <div class="achievement-icon" style="width:40px;height:40px;font-size:1.2rem;filter:grayscale(1)">💎</div>
+            <div class="achievement-name" style="font-size:0.68rem">Locked</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily challenge -->
+      <div class="glass-card sidebar-card" style="background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(168,85,247,0.06))">
+        <div class="flex items-center gap-8 mb-12">
+          <span style="font-size:1.2rem">🔥</span>
+          <div style="font-weight:700;font-size:0.9rem">Daily Challenge</div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:12px">Type 250 words with ≥96% accuracy. Earn 3× XP!</p>
+        <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--neon-blue);margin-bottom:12px" id="challenge-timer">00:00:00</div>
+        <button class="btn btn-primary btn-sm w-full" style="justify-content:center" onclick="switchMode('standard')">Start Now →</button>
+      </div>
+
+      <!-- AdSense -->
+      <div class="adsense-square">Ad · 300×250</div>
+    </aside>
+  </div>
+
+  <!-- ══ RESULTS OVERLAY ══════════════════════════════════════ -->
+  <div class="results-overlay" id="results-overlay" role="dialog" aria-label="Test results">
+    <div class="results-card">
+      <div class="flex items-center gap-16 mb-24" style="flex-wrap:wrap">
+        <div>
+          <div class="caption mb-4">Your speed</div>
+          <div class="results-wpm" id="res-wpm">0</div>
+          <div style="font-family:var(--font-display);font-size:1rem;color:var(--text-secondary)">words per minute</div>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <div class="badge badge-gold mb-8" id="res-rank-badge">Calculating...</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary)">Faster than <span id="res-percentile" style="color:var(--neon-cyan);font-weight:700">—</span>% of users</div>
+        </div>
+      </div>
+
+      <div class="results-grid">
+        <div class="result-stat">
+          <span class="result-stat-value" id="res-acc" style="color:var(--neon-cyan)">—</span>
+          <span class="result-stat-label">Accuracy</span>
+        </div>
+        <div class="result-stat">
+          <span class="result-stat-value" id="res-errors" style="color:var(--neon-pink)">—</span>
+          <span class="result-stat-label">Errors</span>
+        </div>
+        <div class="result-stat">
+          <span class="result-stat-value" id="res-xp" style="color:var(--neon-gold)">—</span>
+          <span class="result-stat-label">XP Earned</span>
+        </div>
+        <div class="result-stat">
+          <span class="result-stat-value" id="res-coins" style="color:var(--neon-purple)">—</span>
+          <span class="result-stat-label">Coins</span>
+        </div>
+      </div>
+
+      <!-- AI coach results -->
+      <div class="ai-coach-panel" id="res-ai-coach">
+        <div class="flex items-center gap-10 mb-16">
+          <span style="font-size:1.3rem">🤖</span>
+          <div style="font-weight:700">AI Coach Feedback</div>
+        </div>
+        <div id="res-ai-tips"></div>
+      </div>
+
+      <!-- WPM mini bar chart -->
+      <div class="mt-24">
+        <div class="caption mb-8">WPM over time (this session)</div>
+        <div class="chart-placeholder" id="wpm-chart" style="height:80px;padding:0">
+          <!-- Bars injected by JS -->
+        </div>
+      </div>
+
+      <div class="flex gap-12 mt-28" style="flex-wrap:wrap">
+        <button id="btn-retry" class="btn btn-primary" style="flex:1;justify-content:center">↺ Try Again</button>
+        <button id="btn-next-res" class="btn btn-secondary" style="flex:1;justify-content:center">Next Text →</button>
+        <a href="dashboard.html" class="btn btn-ghost" style="flex:1;justify-content:center">📊 Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+  // ── Typing Test Page Logic ──────────────────────────────────
+  (function(){
+    const { TypingEngine, AICoach, GameSystem, TEXTS, showToast } = window.TypeMaster;
+
+    // State
+    let currentMode = 'standard';
+    let currentLang = 'english';
+    let currentDuration = 60;
+    let sessionTests = 0;
+    let sessionAccTotal = 0;
+    let sessionBestWpm = 0;
+    let wpmHistory = [];
+    let battleInterval = null;
+
+    // Refs
+    const display    = document.getElementById('typing-display');
+    const input      = document.getElementById('typing-input');
+    const wpmEl      = document.getElementById('stat-wpm');
+    const accEl      = document.getElementById('stat-acc');
+    const errEl      = document.getElementById('stat-err');
+    const timerEl    = document.getElementById('stat-timer');
+    const timerRing  = document.getElementById('timer-ring');
+    const overlay    = document.getElementById('results-overlay');
+
+    // Engine instance
+    let engine = new TypingEngine({
+      display, input, wpmEl, accEl, timerEl,
+      duration: currentDuration,
+      onFinish: handleFinish
+    });
+
+    // Load initial text
+    loadText();
+
+    // Timer ring circumference
+    const CIRCUM = 2 * Math.PI * 39; // r=39
+    timerRing.style.strokeDasharray = CIRCUM;
+
+    // Override engine's timer to also update ring
+    const origLoad = engine.load.bind(engine);
+    engine.load = function(text) {
+      origLoad(text);
+      timerRing.style.strokeDashoffset = 0;
+      errEl.textContent = '0';
+    };
+
+    // Intercept timer tick for ring animation
+    const origStart = engine.start.bind(engine);
+    engine.start = function() {
+      origStart();
+      // Override setInterval to also animate ring
+      const startOffset = 0;
+      const tickRing = () => {
+        if (!engine.running) return;
+        const elapsed = currentDuration - engine.timeLeft;
+        const pct = elapsed / currentDuration;
+        timerRing.style.strokeDashoffset = CIRCUM * pct;
+        if (engine.running) requestAnimationFrame(tickRing);
+      };
+      requestAnimationFrame(tickRing);
+    };
+
+    function loadText(forceText) {
+      let textPool;
+      switch(currentMode) {
+        case 'code':        textPool = TEXTS.code_python;   break;
+        case 'placement':   textPool = TEXTS.placement;      break;
+        case 'tamil':       textPool = currentLang === 'tamil' ? TEXTS.tamil : TEXTS.standard; break;
+        default:            textPool = TEXTS.standard;
+      }
+      const text = forceText || textPool[Math.floor(Math.random() * textPool.length)];
+      engine.duration = currentDuration;
+      engine.timeLeft = currentDuration;
+      engine.load(text);
+      timerEl.textContent = currentDuration;
+      timerRing.style.strokeDashoffset = 0;
+
+      // Update quote
+      const q = AICoach.getQuote();
+      document.getElementById('quote-text').textContent = `"${q.q}"`;
+      document.getElementById('quote-author').textContent = `— ${q.a}`;
+    }
+
+    // ── Mode switching ──
+    document.getElementById('mode-tabs').addEventListener('click', e => {
+      const tab = e.target.closest('.mode-tab');
+      if (!tab) return;
+      switchMode(tab.dataset.mode);
+    });
+    window.switchMode = function(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+      // Sub-modes
+      document.getElementById('submode-code').style.display = mode === 'code' ? 'flex' : 'none';
+      document.getElementById('submode-engineering').style.display = mode === 'engineering' ? 'flex' : 'none';
+      document.getElementById('submode-tamil').style.display = mode === 'tamil' ? 'block' : 'none';
+      document.getElementById('custom-text-area').style.display = mode === 'custom' ? 'block' : 'none';
+      document.getElementById('battle-arena').style.display = mode === 'battle' ? 'block' : 'none';
+      if (mode === 'battle') startBattleSim();
+      else stopBattleSim();
+      if (mode !== 'custom') loadText();
+    };
+
+    // ── Sub-mode buttons ──
+    document.querySelectorAll('.submode-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const group = this.closest('.submode-row');
+        group.querySelectorAll('.submode-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        // load relevant text
+        if (this.dataset.lang) {
+          const key = 'code_' + this.dataset.lang;
+          const pool = TEXTS[key] || TEXTS.code_python;
+          loadText(pool[0]);
+        } else {
+          loadText();
+        }
+      });
+    });
+
+    // ── Tamil language toggle ──
+    document.getElementById('lang-english').addEventListener('click', () => {
+      currentLang = 'english';
+      document.getElementById('lang-english').classList.add('active');
+      document.getElementById('lang-tamil').classList.remove('active');
+      loadText();
+    });
+    document.getElementById('lang-tamil').addEventListener('click', () => {
+      currentLang = 'tamil';
+      document.getElementById('lang-tamil').classList.add('active');
+      document.getElementById('lang-english').classList.remove('active');
+      loadText();
+    });
+
+    // ── Duration pills ──
+    document.querySelectorAll('.dur-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentDuration = parseInt(this.dataset.dur);
+        loadText();
+      });
+    });
+
+    // ── Custom text ──
+    document.getElementById('btn-load-custom').addEventListener('click', () => {
+      const text = document.getElementById('custom-input').value.trim();
+      if (text.length < 10) { showToast('Please enter at least 10 characters.', 'purple'); return; }
+      loadText(text);
+    });
+
+    // ── Restart / Next ──
+    document.getElementById('btn-restart').addEventListener('click', () => loadText(engine.text));
+    document.getElementById('btn-next').addEventListener('click', () => loadText());
+    document.getElementById('btn-retry').addEventListener('click', () => {
+      overlay.classList.remove('visible');
+      loadText(engine.text);
+    });
+    document.getElementById('btn-next-res').addEventListener('click', () => {
+      overlay.classList.remove('visible');
+      loadText();
+    });
+    document.getElementById('btn-close-coach').addEventListener('click', () => {
+      document.getElementById('ai-coach-inline').style.display = 'none';
+    });
+
+    // ── Focus on display click ──
+    display.addEventListener('click', () => input.focus());
+    document.addEventListener('keydown', e => {
+      if (!overlay.classList.contains('visible') && document.activeElement !== input) {
+        input.focus();
+      }
+    });
+
+    // ── Finish handler ──
+    function handleFinish(stats) {
+      wpmHistory.push(stats.wpm);
+      sessionTests++;
+      sessionAccTotal += stats.acc;
+      if (stats.wpm > sessionBestWpm) sessionBestWpm = stats.wpm;
+
+      // Update session sidebar
+      document.getElementById('session-best').textContent = sessionBestWpm + ' WPM';
+      document.getElementById('session-count').textContent = sessionTests;
+      document.getElementById('session-acc').textContent = Math.round(sessionAccTotal / sessionTests) + '%';
+
+      // Gamification
+      const earned = GameSystem.recordTest(stats);
+      GameSystem.updateUI();
+
+      // Show earn pop
+      const pop = document.getElementById('earn-pop');
+      document.getElementById('earn-pop-text').textContent = `+${earned.xp} XP · +${earned.coins} Coins`;
+      pop.classList.add('show');
+      setTimeout(() => pop.classList.remove('show'), 3000);
+
+      // Fill overlay
+      document.getElementById('res-wpm').textContent = stats.wpm;
+      document.getElementById('res-acc').textContent = stats.acc + '%';
+      document.getElementById('res-errors').textContent = stats.errors;
+      document.getElementById('res-xp').textContent = '+' + earned.xp;
+      document.getElementById('res-coins').textContent = '+' + earned.coins;
+
+      // Rank
+      const rankData = getRank(stats.wpm);
+      document.getElementById('res-rank-badge').textContent = rankData.label;
+      document.getElementById('res-percentile').textContent = rankData.pct;
+
+      // AI tips
+      const tips = AICoach.analyze(stats);
+      const tipsHtml = tips.map(t => `
+        <div class="ai-tip">
+          <div class="ai-tip-icon">${t.icon}</div>
+          <div class="ai-tip-text">${t.msg}</div>
+        </div>
+      `).join('');
+      document.getElementById('res-ai-tips').innerHTML = tipsHtml;
+      document.getElementById('ai-tips-list').innerHTML = tipsHtml;
+      document.getElementById('ai-coach-inline').style.display = 'block';
+
+      // Update AI sidebar
+      const skill = stats.wpm < 40 ? 'Beginner' : stats.wpm < 70 ? 'Intermediate' : stats.wpm < 100 ? 'Advanced' : 'Expert';
+      const skillPct = Math.min(stats.wpm, 150) / 150 * 100;
+      document.getElementById('coach-skill').textContent = skill;
+      document.getElementById('coach-level-bar').style.width = skillPct + '%';
+      document.getElementById('coach-sidebar-tip').textContent = tips[0]?.msg || '';
+
+      // WPM chart
+      renderWpmChart();
+
+      // Show overlay
+      overlay.classList.add('visible');
+    }
+
+    function getRank(wpm) {
+      if (wpm >= 120) return { label: '🚀 Elite Typist', pct: 99 };
+      if (wpm >= 100) return { label: '⚡ Century Club', pct: 95 };
+      if (wpm >= 80)  return { label: '🎯 Advanced', pct: 85 };
+      if (wpm >= 60)  return { label: '📈 Intermediate', pct: 65 };
+      if (wpm >= 40)  return { label: '✅ Progressing', pct: 40 };
+      return { label: '🌱 Beginner', pct: 15 };
+    }
+
+    function renderWpmChart() {
+      const chart = document.getElementById('wpm-chart');
+      const max = Math.max(...wpmHistory, 10);
+      chart.innerHTML = wpmHistory.map((v, i) => `
+        <div class="chart-bar-col">
+          <div class="chart-bar" style="height:${(v/max*100)}%;min-height:4px" title="${v} WPM"></div>
+          <div class="chart-label">#${i+1}</div>
+        </div>
+      `).join('');
+    }
+
+    // ── Battle simulation ──
+    function startBattleSim() {
+      let p1 = 0, p2 = 0;
+      battleInterval = setInterval(() => {
+        if (!engine.running) return;
+        p1 = Math.min(100, p1 + Math.random() * 3);
+        p2 = Math.min(100, p2 + Math.random() * 2.5);
+        const youPct = engine.typed ? (engine.typed.length / engine.text.length * 100) : 0;
+        document.getElementById('battle-prog-you').style.width = youPct + '%';
+        document.getElementById('battle-prog-1').style.width = p1 + '%';
+        document.getElementById('battle-prog-2').style.width = p2 + '%';
+        document.getElementById('battle-wpm-you').textContent = wpmEl.textContent;
+        document.getElementById('battle-wpm-1').textContent = Math.round(p1 * 1.4);
+        document.getElementById('battle-wpm-2').textContent = Math.round(p2 * 1.3);
+      }, 400);
+    }
+    function stopBattleSim() {
+      clearInterval(battleInterval);
+    }
+
+    // ── Error tracking: update stat-err on input ──
+    input.addEventListener('input', () => {
+      let errors = 0;
+      const typed = engine.typed;
+      for (let i = 0; i < typed.length; i++) {
+        if (typed[i] !== (engine.text[i] || '')) errors++;
+      }
+      errEl.textContent = errors;
+    });
+
+  })();
+  </script>
+</body>
+</html>

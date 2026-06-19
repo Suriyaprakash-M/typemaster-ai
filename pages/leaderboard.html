@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaderboard — TypeMaster AI | Top WPM Rankings</title>
+  <meta name="description" content="See the top typists on TypeMaster AI. Daily, weekly, monthly and global WPM leaderboards. Can you reach #1?" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://typemasterai.com/pages/leaderboard.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; }
+    .lb-page { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+    @media(max-width:640px){ .lb-page { padding: 24px 16px; } }
+
+    /* ── Top 3 podium ── */
+    .podium { display: flex; align-items: flex-end; justify-content: center; gap: 16px; margin: 40px 0; }
+    .podium-slot {
+      display: flex; flex-direction: column; align-items: center;
+      flex: 1; max-width: 200px;
+    }
+    .podium-platform {
+      width: 100%; border-radius: var(--radius-md) var(--radius-md) 0 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      padding: 24px 16px;
+      position: relative;
+    }
+    .podium-1 { height: 160px; background: linear-gradient(180deg, rgba(255,215,0,0.15), rgba(255,215,0,0.05)); border: 1px solid rgba(255,215,0,0.3); box-shadow: 0 0 40px rgba(255,215,0,0.1); }
+    .podium-2 { height: 130px; background: linear-gradient(180deg, rgba(192,192,192,0.12), rgba(192,192,192,0.04)); border: 1px solid rgba(192,192,192,0.25); }
+    .podium-3 { height: 110px; background: linear-gradient(180deg, rgba(205,127,50,0.12), rgba(205,127,50,0.04)); border: 1px solid rgba(205,127,50,0.25); }
+    .podium-rank-num {
+      position: absolute; top: 12px;
+      font-family: var(--font-display); font-size: 1.8rem; font-weight: 900;
+    }
+    .podium-avatar-wrap { position: relative; margin-bottom: -24px; margin-top: -60px; }
+    .podium-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; font-weight: 700;
+      border: 3px solid transparent;
+    }
+    .podium-crown {
+      position: absolute; top: -22px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.4rem;
+    }
+    .podium-name { font-weight: 700; font-size: 0.9rem; margin-top: 28px; margin-bottom: 4px; text-align: center; }
+    .podium-wpm { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; }
+    .podium-meta { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
+    @media(max-width:520px){
+      .podium { gap: 8px; }
+      .podium-slot { max-width: 100px; }
+      .podium-avatar { width: 52px; height: 52px; font-size: 1.2rem; }
+    }
+
+    /* ── Full leaderboard table ── */
+    .lb-table-wrap { overflow-x: auto; }
+    .lb-full-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 120px 120px 100px 80px;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 6px;
+      transition: all 0.2s;
+      min-width: 600px;
+    }
+    .lb-full-row:hover { background: rgba(255,255,255,0.05); border-color: rgba(0,212,255,0.15); }
+    .lb-full-row.you { border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.05); }
+    .lb-full-row.top-3 { border-color: rgba(255,215,0,0.2); background: rgba(255,215,0,0.03); }
+    .lb-header {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-muted);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 12px; margin-bottom: 12px;
+    }
+    .lb-rank-num {
+      font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+      text-align: center;
+    }
+    .lb-player { display: flex; align-items: center; gap: 12px; }
+    .lb-player-name { font-weight: 600; font-size: 0.92rem; }
+    .lb-player-sub { font-size: 0.75rem; color: var(--text-muted); }
+    .lb-wpm-val { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--neon-blue); }
+    .lb-acc-val { font-size: 0.88rem; color: var(--neon-cyan); font-weight: 600; }
+    .lb-badge-slot { display: flex; gap: 4px; flex-wrap: wrap; }
+    .lb-action { text-align: right; }
+
+    /* ── Search / filter bar ── */
+    .lb-controls {
+      display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: center;
+    }
+    .lb-search {
+      flex: 1; min-width: 200px;
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-body); font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .lb-search:focus { border-color: rgba(0,212,255,0.5); }
+    .lb-search::placeholder { color: var(--text-muted); }
+
+    /* ── Tabs ── */
+    .lb-tabs { display: flex; gap: 4px; background: rgba(0,0,0,0.3); border-radius: var(--radius-md); padding: 4px; border: 1px solid var(--glass-border); flex-wrap: wrap; }
+    .lb-tab {
+      flex: 1; min-width: max-content; padding: 10px 20px;
+      border-radius: 10px; background: transparent; border: none;
+      color: var(--text-secondary); font-size: 0.88rem; font-weight: 500;
+      cursor: pointer; transition: all 0.25s; white-space: nowrap;
+    }
+    .lb-tab.active {
+      background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(168,85,247,0.2));
+      color: var(--text-primary); border: 1px solid rgba(0,212,255,0.25);
+    }
+
+    /* ── Mode filter pills ── */
+    .mode-filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .mode-filter-btn {
+      padding: 6px 14px; border-radius: 100px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .mode-filter-btn.active { background: rgba(0,212,255,0.12); border-color: rgba(0,212,255,0.35); color: var(--neon-blue); }
+
+    /* ── Your rank banner ── */
+    .your-rank-banner {
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(168,85,247,0.08));
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: var(--radius-lg);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px; margin-bottom: 24px;
+    }
+
+    /* ── Stats bar ── */
+    .lb-stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+    @media(max-width:640px){ .lb-stats-row { grid-template-columns: repeat(2,1fr); } }
+
+    /* ── Battle section ── */
+    .battle-card-mini { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .battle-room-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-md);
+      transition: all 0.2s;
+    }
+    .battle-room-row:hover { background: rgba(57,255,20,0.05); border-color: rgba(57,255,20,0.2); }
+    .room-name { font-weight: 600; font-size: 0.9rem; flex: 1; }
+    .room-players { font-size: 0.8rem; color: var(--text-secondary); }
+    .room-status { font-size: 0.75rem; font-weight: 700; }
+    .room-live { color: var(--neon-green); }
+    .room-waiting { color: var(--neon-gold); }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html">Practice</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="premium.html">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="lb-page">
+
+    <!-- Header -->
+    <div class="text-center mb-40 reveal">
+      <div class="section-label" style="justify-content:center"><span>Global Rankings</span></div>
+      <h1 class="display-lg mb-12">🏆 <span class="gradient-text">Leaderboard</span></h1>
+      <p class="body-lg text-secondary">The fastest fingers on the planet. Where do you rank?</p>
+    </div>
+
+    <!-- Live stats banner -->
+    <div class="lb-stats-row reveal">
+      <div class="glass-card" style="padding:20px;text-align:center">
+        <div style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--neon-blue)" class="counter" data-target="500000">0</div>
+        <div class="caption">Total Players</div>
+      </div>
+      <div class="glass-card" style="padding:20px;text-align:center">
+        <div style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--neon-green)" class="counter" data-target="1247">0</div>
+        <div class="caption">Online Now</div>
+      </div>
+      <div class="glass-card" style="padding:20px;text-align:center">
+        <div style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--neon-gold)">148</div>
+        <div class="caption">Top WPM Today</div>
+      </div>
+      <div class="glass-card" style="padding:20px;text-align:center">
+        <div style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--neon-purple)">99.2%</div>
+        <div class="caption">Top Accuracy</div>
+      </div>
+    </div>
+
+    <!-- AdSense -->
+    <div class="adsense-horizontal reveal">Advertisement · 728×90</div>
+
+    <!-- Your rank banner -->
+    <div class="your-rank-banner reveal">
+      <div class="flex items-center gap-16">
+        <div class="avatar-circle">U</div>
+        <div>
+          <div style="font-weight:700;font-size:0.95rem">Your Current Rank</div>
+          <div class="caption">Guest User · Sign in to save your rank</div>
+        </div>
+      </div>
+      <div class="flex gap-24 items-center">
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--text-muted)">—</div>
+          <div class="caption">Global Rank</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--neon-blue)">0</div>
+          <div class="caption">Best WPM</div>
+        </div>
+        <a href="typing-test.html" class="btn btn-primary btn-sm">Claim Your Rank →</a>
+      </div>
+    </div>
+
+    <!-- Time range tabs -->
+    <div class="lb-tabs reveal" style="margin-bottom:20px" id="lb-time-tabs">
+      <button class="lb-tab active" data-lbtime="daily">📅 Daily</button>
+      <button class="lb-tab" data-lbtime="weekly">📆 Weekly</button>
+      <button class="lb-tab" data-lbtime="monthly">🗓️ Monthly</button>
+      <button class="lb-tab" data-lbtime="alltime">🌍 All Time</button>
+      <button class="lb-tab" data-lbtime="battle">⚔️ Battle Arena</button>
+    </div>
+
+    <!-- Mode filter -->
+    <div class="mode-filter-row reveal">
+      <button class="mode-filter-btn active">All Modes</button>
+      <button class="mode-filter-btn">⚡ Standard</button>
+      <button class="mode-filter-btn">💻 Code</button>
+      <button class="mode-filter-btn">🎯 Placement</button>
+      <button class="mode-filter-btn">🌏 Tamil</button>
+      <button class="mode-filter-btn">🎓 Engineering</button>
+    </div>
+
+    <!-- Search -->
+    <div class="lb-controls reveal">
+      <input class="lb-search" type="text" placeholder="🔍  Search player name..." id="lb-search-input" />
+      <select class="lb-search" style="width:auto;flex:none">
+        <option>All Countries</option>
+        <option>🇮🇳 India</option>
+        <option>🇺🇸 USA</option>
+        <option>🇬🇧 UK</option>
+        <option>🇸🇬 Singapore</option>
+      </select>
+    </div>
+
+    <!-- ══ PODIUM — Top 3 ════════════════════════════════════ -->
+    <div class="podium reveal" id="lb-podium">
+      <!-- 2nd place -->
+      <div class="podium-slot">
+        <div class="podium-avatar-wrap">
+          <div class="podium-avatar" style="background:linear-gradient(135deg,#C0C0C0,#888);color:#000;border-color:#C0C0C0">RM</div>
+        </div>
+        <div class="podium-platform podium-2">
+          <div class="podium-rank-num" style="color:#C0C0C0">2</div>
+          <div class="podium-wpm" style="color:#C0C0C0">141</div>
+          <div style="font-size:0.7rem;color:var(--text-muted)">WPM</div>
+        </div>
+        <div class="podium-name">Rithika M.</div>
+        <div class="podium-meta">Bangalore · 99.1%</div>
+      </div>
+
+      <!-- 1st place -->
+      <div class="podium-slot">
+        <div class="podium-avatar-wrap">
+          <div class="podium-crown">👑</div>
+          <div class="podium-avatar" style="background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,0.4)">SK</div>
+        </div>
+        <div class="podium-platform podium-1">
+          <div class="podium-rank-num" style="color:var(--neon-gold)">1</div>
+          <div class="podium-wpm" style="color:var(--neon-gold)">148</div>
+          <div style="font-size:0.7rem;color:rgba(255,215,0,0.7)">WPM</div>
+        </div>
+        <div class="podium-name">Siddharth K.</div>
+        <div class="podium-meta">Chennai · 99.6%</div>
+      </div>
+
+      <!-- 3rd place -->
+      <div class="podium-slot">
+        <div class="podium-avatar-wrap">
+          <div class="podium-avatar" style="background:linear-gradient(135deg,#CD7F32,#8B4513);border-color:#CD7F32">AK</div>
+        </div>
+        <div class="podium-platform podium-3">
+          <div class="podium-rank-num" style="color:#CD7F32">3</div>
+          <div class="podium-wpm" style="color:#CD7F32">138</div>
+          <div style="font-size:0.7rem;color:var(--text-muted)">WPM</div>
+        </div>
+        <div class="podium-name">Aryan K.</div>
+        <div class="podium-meta">Mumbai · 98.8%</div>
+      </div>
+    </div>
+
+    <!-- ══ FULL LEADERBOARD TABLE ════════════════════════════ -->
+    <div class="glass-card reveal" style="padding:24px" id="lb-main-panel">
+
+      <!-- Standard leaderboard -->
+      <div id="lb-panel-daily">
+        <!-- Header row -->
+        <div class="lb-full-row lb-header" style="background:none;border:none;margin-bottom:0">
+          <div style="text-align:center">Rank</div>
+          <div>Player</div>
+          <div>Best WPM</div>
+          <div>Accuracy</div>
+          <div>Badges</div>
+          <div style="text-align:right">Action</div>
+        </div>
+
+        <!-- Rows -->
+        <div class="lb-table-wrap" id="lb-rows"></div>
+
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-24" style="flex-wrap:wrap;gap:12px">
+          <span class="caption">Showing 1–20 of 500,000 players</span>
+          <div class="flex gap-6">
+            <button class="btn btn-secondary btn-sm">← Prev</button>
+            <button class="btn btn-ghost btn-sm" style="min-width:36px;background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.3);color:var(--neon-blue)">1</button>
+            <button class="btn btn-secondary btn-sm" style="min-width:36px">2</button>
+            <button class="btn btn-secondary btn-sm" style="min-width:36px">3</button>
+            <span style="align-self:center;color:var(--text-muted)">...</span>
+            <button class="btn btn-secondary btn-sm" style="min-width:36px">25000</button>
+            <button class="btn btn-secondary btn-sm">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Battle arena leaderboard (hidden) -->
+      <div id="lb-panel-battle" style="display:none">
+        <div class="heading-md mb-20">⚔️ Battle Arena — Open Rooms</div>
+        <div class="battle-card-mini" style="padding:0">
+          <div class="battle-room-row">
+            <div style="font-size:1.2rem">🏁</div>
+            <div>
+              <div class="room-name">Speed Racers #101</div>
+              <div class="room-players">👥 4/10 players</div>
+            </div>
+            <span class="room-status room-live">● LIVE</span>
+            <a href="typing-test.html?mode=battle" class="btn btn-ghost btn-sm">Join</a>
+          </div>
+          <div class="battle-room-row">
+            <div style="font-size:1.2rem">⚡</div>
+            <div>
+              <div class="room-name">Lightning Round #88</div>
+              <div class="room-players">👥 7/10 players</div>
+            </div>
+            <span class="room-status room-live">● LIVE</span>
+            <a href="typing-test.html?mode=battle" class="btn btn-ghost btn-sm">Join</a>
+          </div>
+          <div class="battle-room-row">
+            <div style="font-size:1.2rem">🎯</div>
+            <div>
+              <div class="room-name">Accuracy Masters #44</div>
+              <div class="room-players">👥 2/10 players</div>
+            </div>
+            <span class="room-status room-waiting">◌ Waiting</span>
+            <a href="typing-test.html?mode=battle" class="btn btn-primary btn-sm">Join</a>
+          </div>
+          <div class="battle-room-row">
+            <div style="font-size:1.2rem">💻</div>
+            <div>
+              <div class="room-name">Code Typers Only #12</div>
+              <div class="room-players">👥 5/10 players</div>
+            </div>
+            <span class="room-status room-live">● LIVE</span>
+            <a href="typing-test.html?mode=battle" class="btn btn-ghost btn-sm">Join</a>
+          </div>
+          <div class="battle-room-row">
+            <div style="font-size:1.2rem">🌏</div>
+            <div>
+              <div class="room-name">Tamil Typing Battle #7</div>
+              <div class="room-players">👥 1/10 players</div>
+            </div>
+            <span class="room-status room-waiting">◌ Waiting</span>
+            <a href="typing-test.html?mode=battle" class="btn btn-primary btn-sm">Join</a>
+          </div>
+        </div>
+        <div class="flex gap-12 mt-24">
+          <a href="typing-test.html?mode=battle" class="btn btn-primary">⚔️ Create New Room</a>
+          <button class="btn btn-ghost">🔗 Invite Friend</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AdSense -->
+    <div class="adsense-horizontal reveal" style="margin-top:24px">Advertisement · 728×90</div>
+
+    <!-- Country leaderboard -->
+    <div class="glass-card reveal" style="padding:24px;margin-top:20px">
+      <div class="heading-md mb-20">🌍 Top Countries by Average WPM</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="flex items-center gap-16">
+          <span style="font-size:1.2rem;width:28px">🇮🇳</span>
+          <span style="font-size:0.9rem;font-weight:600;flex:1">India</span>
+          <div style="flex:3"><div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div></div>
+          <span style="font-family:var(--font-display);font-size:0.95rem;color:var(--neon-blue);min-width:55px;text-align:right">72 WPM</span>
+          <span class="badge badge-blue" style="font-size:0.65rem">127K users</span>
+        </div>
+        <div class="flex items-center gap-16">
+          <span style="font-size:1.2rem;width:28px">🇺🇸</span>
+          <span style="font-size:0.9rem;font-weight:600;flex:1">United States</span>
+          <div style="flex:3"><div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div></div>
+          <span style="font-family:var(--font-display);font-size:0.95rem;color:var(--neon-blue);min-width:55px;text-align:right">85 WPM</span>
+          <span class="badge badge-blue" style="font-size:0.65rem">98K users</span>
+        </div>
+        <div class="flex items-center gap-16">
+          <span style="font-size:1.2rem;width:28px">🇸🇬</span>
+          <span style="font-size:0.9rem;font-weight:600;flex:1">Singapore</span>
+          <div style="flex:3"><div class="progress-bar"><div class="progress-fill" style="width:91%"></div></div></div>
+          <span style="font-family:var(--font-display);font-size:0.95rem;color:var(--neon-blue);min-width:55px;text-align:right">91 WPM</span>
+          <span class="badge badge-blue" style="font-size:0.65rem">34K users</span>
+        </div>
+        <div class="flex items-center gap-16">
+          <span style="font-size:1.2rem;width:28px">🇬🇧</span>
+          <span style="font-size:0.9rem;font-weight:600;flex:1">United Kingdom</span>
+          <div style="flex:3"><div class="progress-bar"><div class="progress-fill" style="width:79%"></div></div></div>
+          <span style="font-family:var(--font-display);font-size:0.95rem;color:var(--neon-blue);min-width:55px;text-align:right">79 WPM</span>
+          <span class="badge badge-blue" style="font-size:0.65rem">45K users</span>
+        </div>
+        <div class="flex items-center gap-16">
+          <span style="font-size:1.2rem;width:28px">🇩🇪</span>
+          <span style="font-size:0.9rem;font-weight:600;flex:1">Germany</span>
+          <div style="flex:3"><div class="progress-bar"><div class="progress-fill" style="width:77%"></div></div></div>
+          <span style="font-family:var(--font-display);font-size:0.95rem;color:var(--neon-blue);min-width:55px;text-align:right">77 WPM</span>
+          <span class="badge badge-blue" style="font-size:0.65rem">29K users</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer style="position:relative;z-index:1;background:var(--bg-deep);border-top:1px solid var(--glass-border);padding:32px 24px;text-align:center">
+    <p style="color:var(--text-muted);font-size:0.83rem">© 2025 TypeMaster AI · <a href="../index.html" style="color:var(--neon-blue)">Home</a> · <a href="typing-test.html" style="color:var(--neon-blue)">Practice</a> · <a href="dashboard.html" style="color:var(--neon-blue)">Dashboard</a></p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+  (function(){
+    // ── Generate leaderboard rows ──
+    const players = [
+      { rank:1,  init:'SK', name:'Siddharth K.',   loc:'Chennai, IN',      wpm:148, acc:'99.6%', badges:['🚀','💎','🔥'], gold:true },
+      { rank:2,  init:'RM', name:'Rithika M.',     loc:'Bangalore, IN',    wpm:141, acc:'99.1%', badges:['🚀','🔥'],      silver:true },
+      { rank:3,  init:'AK', name:'Aryan K.',       loc:'Mumbai, IN',       wpm:138, acc:'98.8%', badges:['🚀'],           bronze:true },
+      { rank:4,  init:'NP', name:'Nithya P.',      loc:'Coimbatore, IN',   wpm:131, acc:'98.3%', badges:['⚡','🔥'] },
+      { rank:5,  init:'VR', name:'Vikram R.',      loc:'Hyderabad, IN',    wpm:128, acc:'97.9%', badges:['⚡'] },
+      { rank:6,  init:'PS', name:'Priya S.',       loc:'Pune, IN',         wpm:124, acc:'97.5%', badges:['⚡'] },
+      { rank:7,  init:'KM', name:'Karthik M.',     loc:'Kolkata, IN',      wpm:121, acc:'97.0%', badges:['⚡'] },
+      { rank:8,  init:'AA', name:'Aditya A.',      loc:'Delhi, IN',        wpm:118, acc:'96.8%', badges:[] },
+      { rank:9,  init:'SR', name:'Sree R.',        loc:'Madurai, IN',      wpm:115, acc:'96.4%', badges:[] },
+      { rank:10, init:'DK', name:'Divya K.',       loc:'Trichy, IN',       wpm:113, acc:'96.1%', badges:[] },
+      { rank:11, init:'TJ', name:'Tom J.',         loc:'London, UK',       wpm:111, acc:'95.8%', badges:[] },
+      { rank:12, init:'ML', name:'Ming L.',        loc:'Singapore',        wpm:109, acc:'95.5%', badges:[] },
+      { rank:13, init:'RK', name:'Raj K.',         loc:'Erode, IN',        wpm:107, acc:'95.2%', badges:[] },
+      { rank:14, init:'PV', name:'Pallavi V.',     loc:'Vellore, IN',      wpm:105, acc:'94.9%', badges:[] },
+      { rank:15, init:'JA', name:'Jake A.',        loc:'New York, US',     wpm:103, acc:'94.6%', badges:[] },
+      { rank:16, init:'HR', name:'Harish R.',      loc:'Salem, IN',        wpm:101, acc:'94.3%', badges:[] },
+      { rank:17, init:'FW', name:'Felix W.',       loc:'Berlin, DE',       wpm:99,  acc:'94.0%', badges:[] },
+      { rank:18, init:'MV', name:'Mohammed V.',    loc:'Chennai, IN',      wpm:97,  acc:'93.7%', badges:[] },
+      { rank:19, init:'BA', name:'Bharath A.',     loc:'Tirunelveli, IN',  wpm:95,  acc:'93.4%', badges:[] },
+      { rank:20, init:'SK', name:'Sneha K.',       loc:'Kochi, IN',        wpm:93,  acc:'93.1%', badges:[] },
+    ];
+
+    const gradients = [
+      'linear-gradient(135deg,#00d4ff,#a855f7)',
+      'linear-gradient(135deg,#a855f7,#f700ff)',
+      'linear-gradient(135deg,#06ffd4,#00d4ff)',
+      'linear-gradient(135deg,#ffd700,#ff8c00)',
+      'linear-gradient(135deg,#39ff14,#06ffd4)',
+      'linear-gradient(135deg,#f700ff,#a855f7)',
+    ];
+
+    function buildRows(data) {
+      const container = document.getElementById('lb-rows');
+      container.innerHTML = data.map((p, i) => {
+        const rankClass = p.rank <= 3 ? 'top-3' : '';
+        const rankEmoji = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : p.rank;
+        const rankColor = p.gold ? 'color:var(--neon-gold)' : p.silver ? 'color:#C0C0C0' : p.bronze ? 'color:#CD7F32' : 'color:var(--text-muted)';
+        const grad = gradients[i % gradients.length];
+        const badgeStr = p.badges.map(b => `<span style="font-size:1rem">${b}</span>`).join('');
+        return `
+          <div class="lb-full-row ${rankClass}">
+            <div class="lb-rank-num" style="${rankColor}">${rankEmoji}</div>
+            <div class="lb-player">
+              <div class="avatar-circle" style="background:${grad};width:38px;height:38px;font-size:0.85rem;flex-shrink:0">${p.init}</div>
+              <div>
+                <div class="lb-player-name">${p.name}</div>
+                <div class="lb-player-sub">${p.loc}</div>
+              </div>
+            </div>
+            <div class="lb-wpm-val">${p.wpm} <span style="font-size:0.65rem;color:var(--text-muted)">WPM</span></div>
+            <div class="lb-acc-val">${p.acc}</div>
+            <div class="lb-badge-slot">${badgeStr || '<span style="color:var(--text-muted);font-size:0.75rem">—</span>'}</div>
+            <div class="lb-action">
+              <button class="btn btn-ghost btn-sm" onclick="window.TypeMaster.showToast('Challenge sent to ${p.name}!','blue')">⚔️ Challenge</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    buildRows(players);
+
+    // ── Time tab switching ──
+    document.getElementById('lb-time-tabs').addEventListener('click', e => {
+      const tab = e.target.closest('.lb-tab');
+      if (!tab) return;
+      document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const isBattle = tab.dataset.lbtime === 'battle';
+      document.getElementById('lb-panel-daily').style.display = isBattle ? 'none' : 'block';
+      document.getElementById('lb-panel-battle').style.display = isBattle ? 'block' : 'none';
+      if (!isBattle) {
+        // Shuffle slightly for different time ranges
+        const shuffled = [...players].sort(() => Math.random() * 0.4 - 0.2).map((p,i) => ({...p, rank:i+1}));
+        buildRows(shuffled);
+      }
+    });
+
+    // ── Search ──
+    document.getElementById('lb-search-input').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      const filtered = players.filter(p => p.name.toLowerCase().includes(q) || p.loc.toLowerCase().includes(q));
+      buildRows(filtered.length ? filtered : players);
+    });
+
+    // ── Mode filter ──
+    document.querySelectorAll('.mode-filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.mode-filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        buildRows([...players].sort(() => Math.random() * 0.3 - 0.15).map((p,i) => ({...p, rank:i+1})));
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

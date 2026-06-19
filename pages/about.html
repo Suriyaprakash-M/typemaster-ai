@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — TypeMaster AI | Our Mission & Story</title>
+  <meta name="description" content="Learn about TypeMaster AI's mission to help 500,000+ students, programmers, and professionals type faster with AI-powered coaching." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://typemasterai.com/pages/about.html" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About TypeMaster AI",
+    "url": "https://typemasterai.com/pages/about.html"
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; }
+    .about-page { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+    @media(max-width:640px){ .about-page { padding: 32px 16px; } }
+
+    /* ── Mission split ── */
+    .mission-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin: 60px 0; }
+    @media(max-width:800px){ .mission-split { grid-template-columns: 1fr; gap: 32px; } }
+    .mission-visual {
+      aspect-ratio: 1;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(168,85,247,0.15));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .mission-visual::before {
+      content: '';
+      position: absolute; inset: -50%;
+      background: radial-gradient(circle, rgba(0,212,255,0.15), transparent 60%);
+      animation: rotateSlow 20s linear infinite;
+    }
+
+    /* ── Values grid ── */
+    .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    @media(max-width:800px){ .values-grid { grid-template-columns: 1fr; } }
+    .value-card { padding: 32px; text-align: center; }
+    .value-icon { font-size: 2.5rem; margin-bottom: 16px; }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; padding-left: 40px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 11px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple));
+      opacity: 0.3;
+    }
+    .timeline-item { position: relative; padding-bottom: 36px; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute; left: -40px; top: 2px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; box-shadow: var(--glow-blue);
+    }
+    .timeline-year { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; color: var(--neon-blue); margin-bottom: 6px; }
+    .timeline-title { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+    .timeline-desc { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ── Team grid ── */
+    .team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    @media(max-width:800px){ .team-grid { grid-template-columns: repeat(2,1fr); } }
+    .team-card { padding: 28px 20px; text-align: center; }
+    .team-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; font-weight: 700; margin: 0 auto 16px;
+    }
+    .team-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+    .team-role { font-size: 0.8rem; color: var(--neon-blue); margin-bottom: 10px; }
+    .team-bio { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── Press logos ── */
+    .press-row { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; align-items: center; opacity: 0.6; }
+    .press-logo { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html">Practice</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="premium.html">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="about-page">
+
+    <!-- Hero -->
+    <div class="text-center reveal" style="margin-bottom:20px">
+      <div class="section-label" style="justify-content:center"><span>Our Story</span></div>
+      <h1 class="display-lg mb-20">Building the future of <span class="gradient-text">human-computer speed</span></h1>
+      <p class="body-lg text-secondary" style="max-width:680px;margin:0 auto">TypeMaster AI was founded on a simple belief: typing is the most-used, least-taught skill of the digital age. We're fixing that with AI.</p>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row reveal">
+      <div class="stat-item">
+        <span class="stat-number counter" data-target="500000">0</span>
+        <span class="stat-label">Active Users</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number counter" data-target="40">0</span>
+        <span class="stat-label">Countries</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number counter" data-target="2023">0</span>
+        <span class="stat-label">Founded</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number counter" data-target="12">0</span>
+        <span class="stat-label">Team Members</span>
+      </div>
+    </div>
+
+    <!-- Mission split -->
+    <div class="mission-split reveal">
+      <div>
+        <div class="section-label"><span>Our Mission</span></div>
+        <h2 class="display-md mb-20">Typing speed shouldn't be<br/><span class="gradient-text">a barrier to opportunity</span></h2>
+        <p class="body-md text-secondary mb-16">Every year, millions of students lose placement opportunities, programmers lose productivity hours, and professionals lose confidence — all because nobody ever taught them to type properly.</p>
+        <p class="body-md text-secondary">We built TypeMaster AI to close that gap with real AI coaching, not just a stopwatch and a paragraph. Our mission is to make world-class typing education free, fun, and accessible to everyone — starting in India and expanding globally.</p>
+      </div>
+      <div class="mission-visual">🎯</div>
+    </div>
+
+    <!-- Values -->
+    <div class="reveal" style="margin:60px 0">
+      <div class="text-center mb-32">
+        <div class="section-label" style="justify-content:center"><span>What We Believe</span></div>
+        <h2 class="display-md">Our Core <span class="gradient-text">Values</span></h2>
+      </div>
+      <div class="values-grid">
+        <div class="glass-card value-card">
+          <div class="value-icon">🤖</div>
+          <h3 class="heading-md mb-12">AI-First, Human-Centered</h3>
+          <p class="body-md text-secondary">We use AI to personalise — never to replace the human joy of mastering a skill.</p>
+        </div>
+        <div class="glass-card value-card">
+          <div class="value-icon">🌍</div>
+          <h3 class="heading-md mb-12">Accessible to Everyone</h3>
+          <p class="body-md text-secondary">Core features are free forever. Language, geography, and income should never block learning.</p>
+        </div>
+        <div class="glass-card value-card">
+          <div class="value-icon">📊</div>
+          <h3 class="heading-md mb-12">Data-Driven Improvement</h3>
+          <p class="body-md text-secondary">Every feature we ship is backed by real typing data from our 500K+ user base.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="reveal" style="margin:60px 0">
+      <div class="text-center mb-40">
+        <div class="section-label" style="justify-content:center"><span>Our Journey</span></div>
+        <h2 class="display-md">From Idea to <span class="gradient-text">500K Users</span></h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">🚀</div>
+          <div class="timeline-year">2023</div>
+          <div class="timeline-title">TypeMaster AI is Founded</div>
+          <div class="timeline-desc">Started as a college project in Chennai to help engineering students prepare for placement typing tests.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">💻</div>
+          <div class="timeline-year">2024 Q1</div>
+          <div class="timeline-title">Coding Typing Mode Launches</div>
+          <div class="timeline-desc">First platform to offer dedicated typing practice for Python, Java, C, and SQL — reaching 50,000 users in 3 months.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🌏</div>
+          <div class="timeline-year">2024 Q3</div>
+          <div class="timeline-title">Tamil Typing Support Added</div>
+          <div class="timeline-desc">Became the first major typing platform with native Tamil + English bilingual switching.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🤖</div>
+          <div class="timeline-year">2025 Q1</div>
+          <div class="timeline-title">AI Typing Coach Goes Live</div>
+          <div class="timeline-desc">Launched our proprietary mistake-analysis engine, personalising training for every single user.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">🏆</div>
+          <div class="timeline-year">2025 Q2</div>
+          <div class="timeline-title">500,000 Active Users</div>
+          <div class="timeline-desc">Crossed half a million learners across 40 countries, with the Battle Arena multiplayer mode launching the same quarter.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AdSense -->
+    <div class="adsense-horizontal reveal">Advertisement · 728×90</div>
+
+    <!-- Team -->
+    <div class="reveal" style="margin:60px 0">
+      <div class="text-center mb-32">
+        <div class="section-label" style="justify-content:center"><span>The People Behind It</span></div>
+        <h2 class="display-md">Meet the <span class="gradient-text">Team</span></h2>
+      </div>
+      <div class="team-grid">
+        <div class="glass-card team-card">
+          <div class="team-avatar">RS</div>
+          <div class="team-name">Ravi Shankar</div>
+          <div class="team-role">Founder & CEO</div>
+          <div class="team-bio">Ex-EdTech product lead. Built TypeMaster AI after seeing classmates fail placement typing tests.</div>
+        </div>
+        <div class="glass-card team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink))">AN</div>
+          <div class="team-name">Ananya Nair</div>
+          <div class="team-role">Head of AI</div>
+          <div class="team-bio">Machine learning engineer focused on keystroke dynamics and personalised coaching algorithms.</div>
+        </div>
+        <div class="glass-card team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,var(--neon-gold),#ff8c00);color:#000">KV</div>
+          <div class="team-name">Karthik V.</div>
+          <div class="team-role">Lead Engineer</div>
+          <div class="team-bio">Full-stack engineer obsessed with Core Web Vitals and making the platform feel instant.</div>
+        </div>
+        <div class="glass-card team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,var(--neon-cyan),var(--neon-blue))">SP</div>
+          <div class="team-name">Sandhya P.</div>
+          <div class="team-role">Head of Design</div>
+          <div class="team-bio">Product designer crafting the glassmorphic, Apple-level UI that makes practising feel premium.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="glass-card text-center reveal" style="padding:60px 32px;background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(168,85,247,0.06))">
+      <h2 class="display-md mb-16">Want to join our mission?</h2>
+      <p class="body-lg text-secondary mb-28" style="max-width:480px;margin:0 auto 28px">We're always looking for passionate engineers, designers, and educators.</p>
+      <div class="flex gap-16" style="justify-content:center;flex-wrap:wrap">
+        <a href="contact.html" class="btn btn-primary btn-lg">📩 Get in Touch</a>
+        <a href="../index.html" class="btn btn-secondary btn-lg">Back to Home</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer style="position:relative;z-index:1;background:var(--bg-deep);border-top:1px solid var(--glass-border);padding:32px 24px;text-align:center">
+    <p style="color:var(--text-muted);font-size:0.83rem">© 2025 TypeMaster AI · <a href="../index.html" style="color:var(--neon-blue)">Home</a> · <a href="blog.html" style="color:var(--neon-blue)">Blog</a> · <a href="contact.html" style="color:var(--neon-blue)">Contact</a></p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — TypeMaster AI | Support & Inquiries</title>
+  <meta name="description" content="Get in touch with the TypeMaster AI team for support, partnerships, press inquiries, or feedback." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://typemasterai.com/pages/contact.html" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact TypeMaster AI",
+    "url": "https://typemasterai.com/pages/contact.html"
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; }
+    .contact-page { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+    @media(max-width:640px){ .contact-page { padding: 32px 16px; } }
+
+    /* ── Layout ── */
+    .contact-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; margin: 48px 0; }
+    @media(max-width:900px){ .contact-layout { grid-template-columns: 1fr; } }
+
+    /* ── Channel cards ── */
+    .channel-card {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
+      cursor: pointer;
+    }
+    .channel-icon {
+      width: 48px; height: 48px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2);
+    }
+    .channel-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+    .channel-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+    .channel-link { font-size: 0.82rem; color: var(--neon-blue); font-weight: 600; margin-top: 6px; display: inline-block; }
+
+    /* ── Form ── */
+    .contact-form-card { padding: 36px; }
+    .form-group { margin-bottom: 20px; }
+    .form-label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 8px; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 12px 16px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-body); font-size: 0.92rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(0,212,255,0.5); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+    .form-textarea { min-height: 140px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:500px){ .form-row { grid-template-columns: 1fr; } }
+
+    /* ── Reason chips ── */
+    .reason-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .reason-chip {
+      padding: 8px 16px; border-radius: 100px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-secondary); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .reason-chip.active { background: rgba(0,212,255,0.12); border-color: rgba(0,212,255,0.35); color: var(--neon-blue); }
+
+    /* ── FAQ ── */
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; cursor: pointer;
+      font-size: 0.95rem; font-weight: 600;
+    }
+    .faq-toggle-icon { font-size: 1.2rem; color: var(--neon-blue); transition: transform 0.3s; flex-shrink: 0; margin-left: 16px; }
+    .faq-item.open .faq-toggle-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s var(--transition);
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer-inner { padding-bottom: 20px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; }
+
+    /* ── Office card ── */
+    .office-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; }
+    .office-icon { font-size: 1.1rem; width: 24px; flex-shrink: 0; }
+
+    /* ── Social row ── */
+    .social-row { display: flex; gap: 10px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html">Practice</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="premium.html">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="contact-page">
+
+    <!-- Header -->
+    <div class="text-center reveal">
+      <div class="section-label" style="justify-content:center"><span>We'd love to hear from you</span></div>
+      <h1 class="display-lg mb-16">📩 <span class="gradient-text">Get in Touch</span></h1>
+      <p class="body-lg text-secondary" style="max-width:600px;margin:0 auto">Questions, feedback, partnership ideas, or bug reports — our team typically responds within 24 hours.</p>
+    </div>
+
+    <div class="contact-layout">
+
+      <!-- ── LEFT: Channels ── -->
+      <div class="reveal">
+        <div class="glass-card channel-card">
+          <div class="channel-icon">💬</div>
+          <div>
+            <div class="channel-title">Live Chat Support</div>
+            <div class="channel-desc">Get instant answers from our support team, available 9 AM – 9 PM IST.</div>
+            <span class="channel-link">Start Chat →</span>
+          </div>
+        </div>
+
+        <div class="glass-card channel-card">
+          <div class="channel-icon">📧</div>
+          <div>
+            <div class="channel-title">Email Us</div>
+            <div class="channel-desc">For detailed queries, account issues, or feedback.</div>
+            <span class="channel-link">support@typemasterai.com</span>
+          </div>
+        </div>
+
+        <div class="glass-card channel-card">
+          <div class="channel-icon">🤝</div>
+          <div>
+            <div class="channel-title">Partnerships & Institutes</div>
+            <div class="channel-desc">Bring TypeMaster AI to your college, coaching centre, or company.</div>
+            <span class="channel-link">partnerships@typemasterai.com</span>
+          </div>
+        </div>
+
+        <div class="glass-card channel-card">
+          <div class="channel-icon">📰</div>
+          <div>
+            <div class="channel-title">Press & Media</div>
+            <div class="channel-desc">Media kits, interviews, and press inquiries.</div>
+            <span class="channel-link">press@typemasterai.com</span>
+          </div>
+        </div>
+
+        <div class="glass-card" style="padding:24px;margin-top:20px">
+          <div class="heading-md mb-16">🏢 Office</div>
+          <div class="office-row">
+            <span class="office-icon">📍</span>
+            <span style="font-size:0.88rem;color:var(--text-secondary)">TypeMaster AI Pvt. Ltd.<br/>IIT Madras Research Park,<br/>Taramani, Chennai 600113,<br/>Tamil Nadu, India</span>
+          </div>
+          <div class="office-row">
+            <span class="office-icon">🕐</span>
+            <span style="font-size:0.88rem;color:var(--text-secondary)">Mon–Fri, 9 AM – 6 PM IST</span>
+          </div>
+          <div class="office-row">
+            <span class="office-icon">📞</span>
+            <span style="font-size:0.88rem;color:var(--text-secondary)">+91 44 1234 5678</span>
+          </div>
+          <div class="social-row">
+            <a href="#" class="btn btn-ghost btn-sm">𝕏</a>
+            <a href="#" class="btn btn-ghost btn-sm">in</a>
+            <a href="#" class="btn btn-ghost btn-sm">▶</a>
+            <a href="#" class="btn btn-ghost btn-sm">◎</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Form ── -->
+      <div class="glass-card contact-form-card reveal">
+        <h2 class="heading-xl mb-24">Send us a message</h2>
+
+        <div class="form-group">
+          <label class="form-label">What's this about?</label>
+          <div class="reason-chips">
+            <span class="reason-chip active">General</span>
+            <span class="reason-chip">Bug Report</span>
+            <span class="reason-chip">Billing</span>
+            <span class="reason-chip">Partnership</span>
+            <span class="reason-chip">Press</span>
+            <span class="reason-chip">Feature Request</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input class="form-input" type="text" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input class="form-input" type="email" placeholder="your@email.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subject *</label>
+          <input class="form-input" type="text" placeholder="Brief subject line" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message *</label>
+          <textarea class="form-textarea" placeholder="Tell us more..." required></textarea>
+        </div>
+
+        <div class="form-group" style="display:flex;align-items:center;gap:10px">
+          <input type="checkbox" id="contact-consent" style="accent-color:var(--neon-blue);width:16px;height:16px" />
+          <label for="contact-consent" style="font-size:0.82rem;color:var(--text-secondary)">I agree to receive occasional emails about TypeMaster AI updates.</label>
+        </div>
+
+        <button class="btn btn-primary w-full" style="justify-content:center" id="btn-send-message">Send Message →</button>
+
+        <p class="caption text-center mt-16">We typically respond within 24 hours on business days.</p>
+      </div>
+    </div>
+
+    <!-- AdSense -->
+    <div class="adsense-horizontal reveal">Advertisement · 728×90</div>
+
+    <!-- FAQ -->
+    <div class="reveal" style="margin-top:60px">
+      <div class="text-center mb-32">
+        <div class="section-label" style="justify-content:center"><span>Quick Answers</span></div>
+        <h2 class="display-md">Frequently Asked <span class="gradient-text">Questions</span></h2>
+      </div>
+      <div class="glass-card" style="padding:8px 32px">
+        <div class="faq-item open">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Is TypeMaster AI really free?
+            <span class="faq-toggle-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Yes! Our core typing test, basic analytics, and 3 typing modes are free forever — no credit card required. We offer a Pro plan for users who want the full AI Coach, all 12 modes, and advanced analytics.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How does the AI Typing Coach actually work?
+            <span class="faq-toggle-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Our AI analyses keystroke timing, error patterns, and finger-level performance from every test you take. It then identifies your specific weaknesses — like hesitation on certain letters — and generates a personalised practice plan targeting exactly those issues.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Can I use TypeMaster AI for placement test preparation?
+            <span class="faq-toggle-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Absolutely. Our Placement Prep Mode includes real aptitude questions, technical definitions, and HR interview answer content — specifically designed for campus recruitment typing tests used by companies like TCS, Infosys, and Wipro.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Does TypeMaster AI support Tamil typing?
+            <span class="faq-toggle-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Yes, we support full Tamil typing with phonetic input, alongside English. You can switch languages mid-session and practice with dedicated Tamil literature and exam-style content.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            How do I cancel my Pro subscription?
+            <span class="faq-toggle-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">You can cancel anytime from your Profile → Settings → Billing page. You'll retain Pro access until the end of your current billing cycle, and we don't ask any retention questions.</div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            Can my school or college get a bulk plan?
+            <span class="faq-toggle-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Yes! Our Team plan supports up to 50 members with an admin dashboard, progress reports, and custom content. For larger institutions, email partnerships@typemasterai.com for custom pricing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map placeholder -->
+    <div class="glass-card reveal" style="margin-top:40px;padding:0;height:300px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,212,255,0.05),rgba(168,85,247,0.05));overflow:hidden;position:relative">
+      <div style="text-align:center">
+        <div style="font-size:3rem;margin-bottom:12px">🗺️</div>
+        <div style="font-weight:600">IIT Madras Research Park, Chennai</div>
+        <div class="caption mt-8">Interactive map loads here</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer style="position:relative;z-index:1;background:var(--bg-deep);border-top:1px solid var(--glass-border);padding:32px 24px;text-align:center">
+    <p style="color:var(--text-muted);font-size:0.83rem">© 2025 TypeMaster AI · <a href="../index.html" style="color:var(--neon-blue)">Home</a> · <a href="about.html" style="color:var(--neon-blue)">About</a> · <a href="blog.html" style="color:var(--neon-blue)">Blog</a></p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    function toggleFaq(el) {
+      const item = el.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(f => { f.classList.remove('open'); f.querySelector('.faq-toggle-icon').textContent = '+'; });
+      if (!wasOpen) {
+        item.classList.add('open');
+        item.querySelector('.faq-toggle-icon').textContent = '+';
+      }
+    }
+
+    // Reason chip selection
+    document.querySelectorAll('.reason-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        document.querySelectorAll('.reason-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Form submit
+    document.getElementById('btn-send-message').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.TypeMaster.showToast('✅ Message sent! We\'ll respond within 24 hours.', 'blue');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /pages/dashboard.html
+Disallow: /pages/profile.html
+
+Sitemap: https://typemasterai.com/sitemap.xml

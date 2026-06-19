@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — TypeMaster AI | Analytics & Progress</title>
+  <meta name="description" content="Track your WPM trends, accuracy, key heatmaps, badges, and daily progress on your TypeMaster AI dashboard." />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; background: var(--bg-void); }
+
+    /* ── Dashboard layout ── */
+    .dash-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 68px);
+    }
+    @media(max-width:900px){ .dash-layout { grid-template-columns: 1fr; } .dash-sidebar { display: none; } }
+
+    /* ── Sidebar ── */
+    .dash-sidebar {
+      background: rgba(7,7,15,0.8);
+      border-right: 1px solid var(--glass-border);
+      padding: 24px 0;
+      position: sticky;
+      top: 68px;
+      height: calc(100vh - 68px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .dash-sidebar-section { padding: 0 16px; margin-bottom: 8px; }
+    .dash-sidebar-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 12px 12px 6px;
+    }
+    .dash-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 2px;
+    }
+    .dash-nav-link:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .dash-nav-link.active { background: rgba(0,212,255,0.1); color: var(--neon-blue); border: 1px solid rgba(0,212,255,0.2); }
+    .dash-nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+    /* ── Main area ── */
+    .dash-main { padding: 32px; overflow-y: auto; }
+    @media(max-width:640px){ .dash-main { padding: 16px; } }
+
+    /* ── Top greeting ── */
+    .dash-greeting { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; }
+    .greeting-avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── KPI cards ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    @media(max-width:900px){ .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:480px){ .kpi-grid { grid-template-columns: 1fr; } }
+    .kpi-card { padding: 24px; position: relative; overflow: hidden; }
+    .kpi-card::after {
+      content: attr(data-icon);
+      position: absolute; right: 16px; top: 16px;
+      font-size: 2.5rem; opacity: 0.12;
+    }
+    .kpi-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; }
+    .kpi-value { font-family: var(--font-display); font-size: 2.2rem; font-weight: 900; line-height: 1; }
+    .kpi-delta { font-size: 0.78rem; margin-top: 8px; }
+    .delta-up   { color: var(--neon-green); }
+    .delta-down { color: var(--neon-pink); }
+
+    /* ── Chart areas ── */
+    .chart-card { padding: 24px; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .chart-title { font-size: 1rem; font-weight: 600; }
+
+    /* ── SVG Chart ── */
+    .svg-chart { width: 100%; overflow: visible; }
+    .chart-line { fill: none; stroke: url(#lineGrad); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .chart-area { opacity: 0.12; }
+    .chart-dot { fill: var(--neon-blue); stroke: var(--bg-void); stroke-width: 2; transition: r 0.2s; cursor: pointer; }
+    .chart-dot:hover { r: 6; }
+    .chart-grid-line { stroke: rgba(255,255,255,0.05); stroke-width: 1; }
+    .chart-axis-label { font-size: 10px; fill: var(--text-muted); font-family: 'Space Grotesk', sans-serif; }
+
+    /* ── Accuracy sparkline ── */
+    .spark-line { fill: none; stroke: var(--neon-cyan); stroke-width: 2; }
+
+    /* ── Full keyboard heatmap ── */
+    .heatmap-full { padding: 24px; }
+    .kb-full-row { display: flex; gap: 5px; margin-bottom: 5px; justify-content: center; }
+    .kb-full-key {
+      min-width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 7px;
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      cursor: default;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .kb-full-key[data-heat="5"]{ background:rgba(247,0,255,0.35);border-color:rgba(247,0,255,0.5);color:#fff; }
+    .kb-full-key[data-heat="4"]{ background:rgba(255,80,0,0.3);border-color:rgba(255,80,0,0.45);color:#fff; }
+    .kb-full-key[data-heat="3"]{ background:rgba(255,215,0,0.2);border-color:rgba(255,215,0,0.35);color:#ffd700; }
+    .kb-full-key[data-heat="2"]{ background:rgba(0,212,255,0.12);border-color:rgba(0,212,255,0.25);color:var(--neon-blue); }
+    .kb-full-key[data-heat="1"]{ background:rgba(57,255,20,0.08);border-color:rgba(57,255,20,0.2);color:var(--neon-green); }
+    .kb-full-key.wide{ min-width:56px; }
+    .kb-full-key.wider{ min-width:72px; }
+    .kb-full-key.widest{ min-width:180px; }
+
+    /* ── Activity calendar ── */
+    .activity-grid { display: flex; gap: 3px; flex-wrap: wrap; }
+    .activity-day {
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s;
+      cursor: default;
+    }
+    .activity-day[data-level="1"]{ background: rgba(0,212,255,0.2); border-color: rgba(0,212,255,0.3); }
+    .activity-day[data-level="2"]{ background: rgba(0,212,255,0.4); border-color: rgba(0,212,255,0.5); }
+    .activity-day[data-level="3"]{ background: rgba(0,212,255,0.65); border-color: rgba(0,212,255,0.7); }
+    .activity-day[data-level="4"]{ background: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 6px rgba(0,212,255,0.5); }
+
+    /* ── Missions ── */
+    .mission-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+    .mission-row:hover { background: rgba(255,255,255,0.04); }
+    .mission-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .mission-name { font-size: 0.9rem; font-weight: 600; }
+    .mission-desc { font-size: 0.78rem; color: var(--text-secondary); }
+    .mission-reward { margin-left: auto; text-align: right; flex-shrink: 0; }
+    .mission-reward-val { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; color: var(--neon-gold); }
+    .mission-reward-label { font-size: 0.7rem; color: var(--text-muted); }
+
+    /* ── Time range tabs ── */
+    .range-tabs { display: flex; gap: 4px; }
+    .range-tab {
+      padding: 5px 12px;
+      border-radius: 100px;
+      background: transparent;
+      border: 1px solid transparent;
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .range-tab.active {
+      background: rgba(0,212,255,0.1);
+      border-color: rgba(0,212,255,0.3);
+      color: var(--neon-blue);
+    }
+
+    /* ── Badge grid ── */
+    .badge-showcase { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px,1fr)); gap: 12px; }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- ══ NAV ══════════════════════════════════════════════════ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html">Practice</a></li>
+        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="premium.html">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm">My Profile</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ DASHBOARD LAYOUT ════════════════════════════════════ -->
+  <div class="dash-layout">
+
+    <!-- ── Sidebar ── -->
+    <nav class="dash-sidebar" aria-label="Dashboard navigation">
+      <div class="dash-sidebar-section">
+        <div style="padding:0 12px;margin-bottom:20px">
+          <div class="flex items-center gap-12">
+            <div class="greeting-avatar" style="width:40px;height:40px;font-size:1rem">U</div>
+            <div>
+              <div style="font-weight:700;font-size:0.9rem">Guest User</div>
+              <div style="font-size:0.75rem;color:var(--neon-blue)">Level <span data-gm="level">1</span></div>
+            </div>
+          </div>
+          <div class="xp-bar-wrap" style="margin-top:12px"><div class="xp-bar-fill" data-gm="xp-bar" style="width:0%"></div></div>
+          <div class="flex justify-between mt-6">
+            <span class="caption"><span data-gm="xp">0</span> XP</span>
+            <span class="caption">Next: 500 XP</span>
+          </div>
+        </div>
+
+        <div class="dash-sidebar-label">Overview</div>
+        <a class="dash-nav-link active" href="#overview"><span class="dash-nav-icon">📊</span>Overview</a>
+        <a class="dash-nav-link" href="#analytics"><span class="dash-nav-icon">📈</span>Analytics</a>
+        <a class="dash-nav-link" href="#heatmap"><span class="dash-nav-icon">⌨️</span>Key Heatmap</a>
+
+        <div class="dash-sidebar-label">Progress</div>
+        <a class="dash-nav-link" href="#missions"><span class="dash-nav-icon">📋</span>Missions</a>
+        <a class="dash-nav-link" href="#badges"><span class="dash-nav-icon">🏅</span>Badges</a>
+        <a class="dash-nav-link" href="#activity"><span class="dash-nav-icon">📅</span>Activity</a>
+
+        <div class="dash-sidebar-label">Compete</div>
+        <a class="dash-nav-link" href="leaderboard.html"><span class="dash-nav-icon">🏆</span>Leaderboard</a>
+        <a class="dash-nav-link" href="typing-test.html?mode=battle"><span class="dash-nav-icon">⚔️</span>Battle Arena</a>
+
+        <div class="dash-sidebar-label">Account</div>
+        <a class="dash-nav-link" href="profile.html"><span class="dash-nav-icon">👤</span>Profile</a>
+        <a class="dash-nav-link" href="premium.html"><span class="dash-nav-icon">✦</span>Go Premium</a>
+      </div>
+
+      <div style="padding:16px;margin-top:auto">
+        <div class="glass-card" style="padding:16px;background:rgba(168,85,247,0.08);border-color:rgba(168,85,247,0.2)">
+          <div style="font-size:0.82rem;font-weight:600;margin-bottom:6px">🤖 AI Coach says</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);line-height:1.6">"Try 5-minute practice sessions twice daily for fastest improvement."</div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── Main ── -->
+    <main class="dash-main">
+
+      <!-- Greeting -->
+      <div class="dash-greeting reveal" id="overview">
+        <div class="flex items-center gap-16">
+          <div class="greeting-avatar">U</div>
+          <div>
+            <h1 class="heading-xl">Welcome back! 👋</h1>
+            <p class="text-secondary body-md">You're on a <strong style="color:var(--neon-blue)" data-gm="streak">0</strong>-day streak. Keep it up!</p>
+          </div>
+        </div>
+        <div class="flex gap-12">
+          <a href="typing-test.html" class="btn btn-primary">⌨ Practice Now</a>
+          <a href="typing-test.html?mode=daily" class="btn btn-ghost">🔥 Daily Challenge</a>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid reveal">
+        <div class="glass-card kpi-card" data-icon="⚡">
+          <div class="kpi-label">Best WPM</div>
+          <div class="kpi-value gradient-text counter" data-target="0">0</div>
+          <div class="kpi-delta delta-up">↑ 12 WPM this week</div>
+        </div>
+        <div class="glass-card kpi-card" data-icon="🎯">
+          <div class="kpi-label">Avg Accuracy</div>
+          <div class="kpi-value" style="color:var(--neon-cyan)">—%</div>
+          <div class="kpi-delta delta-up">↑ 2.4% this week</div>
+        </div>
+        <div class="glass-card kpi-card" data-icon="📋">
+          <div class="kpi-label">Tests Taken</div>
+          <div class="kpi-value" style="color:var(--neon-purple)"><span class="counter" data-target="0">0</span></div>
+          <div class="kpi-delta delta-up">↑ 3 today</div>
+        </div>
+        <div class="glass-card kpi-card" data-icon="🔥">
+          <div class="kpi-label">Current Streak</div>
+          <div class="kpi-value" style="color:var(--neon-gold)"><span data-gm="streak">0</span> days</div>
+          <div class="kpi-delta" style="color:var(--text-muted)">Personal best: 7 days</div>
+        </div>
+      </div>
+
+      <!-- AdSense -->
+      <div class="adsense-horizontal reveal">Advertisement · 728×90</div>
+
+      <!-- ── WPM Trend Chart ── -->
+      <div class="glass-card chart-card reveal" id="analytics">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">📈 WPM Over Time</div>
+            <div class="caption mt-4">Your typing speed progress across recent sessions</div>
+          </div>
+          <div class="range-tabs">
+            <button class="range-tab active">7D</button>
+            <button class="range-tab">30D</button>
+            <button class="range-tab">90D</button>
+            <button class="range-tab">All</button>
+          </div>
+        </div>
+        <svg class="svg-chart" height="240" viewBox="0 0 700 240" id="wpm-trend-chart">
+          <defs>
+            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#00d4ff"/>
+              <stop offset="100%" stop-color="#a855f7"/>
+            </linearGradient>
+            <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid lines -->
+          <line class="chart-grid-line" x1="0" y1="200" x2="700" y2="200"/>
+          <line class="chart-grid-line" x1="0" y1="150" x2="700" y2="150"/>
+          <line class="chart-grid-line" x1="0" y1="100" x2="700" y2="100"/>
+          <line class="chart-grid-line" x1="0" y1="50" x2="700" y2="50"/>
+          <!-- Y labels -->
+          <text class="chart-axis-label" x="0" y="204">0</text>
+          <text class="chart-axis-label" x="0" y="154">30</text>
+          <text class="chart-axis-label" x="0" y="104">60</text>
+          <text class="chart-axis-label" x="0" y="54">90</text>
+          <!-- Area fill -->
+          <path class="chart-area" fill="url(#areaGrad)"
+            d="M30,180 L130,160 L230,140 L330,120 L430,100 L530,85 L630,70 L630,200 L30,200 Z"/>
+          <!-- Line -->
+          <path class="chart-line"
+            d="M30,180 L130,160 L230,140 L330,120 L430,100 L530,85 L630,70"/>
+          <!-- Dots -->
+          <circle class="chart-dot" cx="30"  cy="180" r="4" data-tip="Mon: 42 WPM"/>
+          <circle class="chart-dot" cx="130" cy="160" r="4" data-tip="Tue: 48 WPM"/>
+          <circle class="chart-dot" cx="230" cy="140" r="4" data-tip="Wed: 55 WPM"/>
+          <circle class="chart-dot" cx="330" cy="120" r="4" data-tip="Thu: 61 WPM"/>
+          <circle class="chart-dot" cx="430" cy="100" r="4" data-tip="Fri: 68 WPM"/>
+          <circle class="chart-dot" cx="530" cy="85"  r="4" data-tip="Sat: 73 WPM"/>
+          <circle class="chart-dot" cx="630" cy="70"  r="4" data-tip="Sun: 79 WPM"/>
+          <!-- X labels -->
+          <text class="chart-axis-label" x="24"  y="220">Mon</text>
+          <text class="chart-axis-label" x="124" y="220">Tue</text>
+          <text class="chart-axis-label" x="224" y="220">Wed</text>
+          <text class="chart-axis-label" x="324" y="220">Thu</text>
+          <text class="chart-axis-label" x="424" y="220">Fri</text>
+          <text class="chart-axis-label" x="524" y="220">Sat</text>
+          <text class="chart-axis-label" x="624" y="220">Sun</text>
+        </svg>
+      </div>
+
+      <!-- ── Two-col charts ── -->
+      <div class="grid-2 reveal" style="margin-top:20px">
+        <!-- Accuracy trend -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <div class="chart-title">🎯 Accuracy Trend</div>
+            <span class="badge badge-green">+2.4%</span>
+          </div>
+          <svg class="svg-chart" height="140" viewBox="0 0 320 140">
+            <defs>
+              <linearGradient id="accAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#06ffd4" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#06ffd4" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line class="chart-grid-line" x1="0" y1="120" x2="320" y2="120"/>
+            <line class="chart-grid-line" x1="0" y1="80" x2="320" y2="80"/>
+            <line class="chart-grid-line" x1="0" y1="40" x2="320" y2="40"/>
+            <path fill="url(#accAreaGrad)" d="M20,90 L70,80 L120,70 L170,60 L220,50 L270,40 L270,120 L20,120 Z"/>
+            <path class="spark-line" d="M20,90 L70,80 L120,70 L170,60 L220,50 L270,40" style="stroke-width:2"/>
+            <text class="chart-axis-label" x="0" y="124">85%</text>
+            <text class="chart-axis-label" x="0" y="44">99%</text>
+          </svg>
+          <div class="flex justify-between mt-8">
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--neon-cyan)">94.2%</div>
+              <div class="caption">Avg This Week</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--neon-green)">99%</div>
+              <div class="caption">Best Session</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--text-secondary)">87%</div>
+              <div class="caption">All-Time Avg</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Errors breakdown -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <div class="chart-title">🔴 Error Breakdown</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div>
+              <div class="flex justify-between mb-6">
+                <span style="font-size:0.85rem">Index finger errors</span>
+                <span style="font-size:0.85rem;color:var(--neon-pink);font-weight:600">34%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:34%;background:linear-gradient(90deg,var(--neon-pink),#ff006e)"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-6">
+                <span style="font-size:0.85rem">Ring finger errors</span>
+                <span style="font-size:0.85rem;color:var(--neon-gold);font-weight:600">24%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:24%;background:linear-gradient(90deg,var(--neon-gold),#ff8c00)"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-6">
+                <span style="font-size:0.85rem">Pinky finger errors</span>
+                <span style="font-size:0.85rem;color:var(--neon-purple);font-weight:600">20%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:20%;background:linear-gradient(90deg,var(--neon-purple),var(--neon-pink))"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-6">
+                <span style="font-size:0.85rem">Middle finger errors</span>
+                <span style="font-size:0.85rem;color:var(--neon-blue);font-weight:600">14%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:14%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between mb-6">
+                <span style="font-size:0.85rem">Thumb / space</span>
+                <span style="font-size:0.85rem;color:var(--neon-cyan);font-weight:600">8%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:8%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-blue))"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Full Keyboard Heatmap ── -->
+      <div class="glass-card chart-card reveal" style="margin-top:20px" id="heatmap">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">⌨️ Full Keyboard Error Heatmap</div>
+            <div class="caption mt-4">Based on your last 50 sessions</div>
+          </div>
+          <div class="flex gap-12">
+            <div class="flex items-center gap-6"><div style="width:12px;height:12px;border-radius:3px;background:rgba(247,0,255,0.5)"></div><span class="caption">High</span></div>
+            <div class="flex items-center gap-6"><div style="width:12px;height:12px;border-radius:3px;background:rgba(255,215,0,0.4)"></div><span class="caption">Medium</span></div>
+            <div class="flex items-center gap-6"><div style="width:12px;height:12px;border-radius:3px;background:rgba(57,255,20,0.2)"></div><span class="caption">Low</span></div>
+          </div>
+        </div>
+        <div style="overflow-x:auto;padding:16px 0">
+          <div style="min-width:480px">
+            <div class="kb-full-row">
+              <div class="kb-full-key" data-heat="0">` </div><div class="kb-full-key" data-heat="0">1</div><div class="kb-full-key" data-heat="0">2</div><div class="kb-full-key" data-heat="1">3</div><div class="kb-full-key" data-heat="0">4</div><div class="kb-full-key" data-heat="2">5</div><div class="kb-full-key" data-heat="0">6</div><div class="kb-full-key" data-heat="0">7</div><div class="kb-full-key" data-heat="0">8</div><div class="kb-full-key" data-heat="0">9</div><div class="kb-full-key" data-heat="0">0</div><div class="kb-full-key" data-heat="0">-</div><div class="kb-full-key" data-heat="0">=</div><div class="kb-full-key wide" data-heat="0">⌫</div>
+            </div>
+            <div class="kb-full-row">
+              <div class="kb-full-key wide" data-heat="0">Tab</div><div class="kb-full-key" data-heat="1">q</div><div class="kb-full-key" data-heat="2">w</div><div class="kb-full-key" data-heat="0">e</div><div class="kb-full-key" data-heat="5">r</div><div class="kb-full-key" data-heat="2">t</div><div class="kb-full-key" data-heat="1">y</div><div class="kb-full-key" data-heat="0">u</div><div class="kb-full-key" data-heat="0">i</div><div class="kb-full-key" data-heat="1">o</div><div class="kb-full-key" data-heat="0">p</div><div class="kb-full-key" data-heat="0">[</div><div class="kb-full-key" data-heat="0">]</div><div class="kb-full-key" data-heat="3">\</div>
+            </div>
+            <div class="kb-full-row">
+              <div class="kb-full-key wider" data-heat="0">Caps</div><div class="kb-full-key" data-heat="0">a</div><div class="kb-full-key" data-heat="3">s</div><div class="kb-full-key" data-heat="0">d</div><div class="kb-full-key" data-heat="5">f</div><div class="kb-full-key" data-heat="1">g</div><div class="kb-full-key" data-heat="0">h</div><div class="kb-full-key" data-heat="0">j</div><div class="kb-full-key" data-heat="0">k</div><div class="kb-full-key" data-heat="0">l</div><div class="kb-full-key" data-heat="4">;</div><div class="kb-full-key" data-heat="3">'</div><div class="kb-full-key wider" data-heat="0">Enter</div>
+            </div>
+            <div class="kb-full-row">
+              <div class="kb-full-key wider" data-heat="0">Shift</div><div class="kb-full-key" data-heat="0">z</div><div class="kb-full-key" data-heat="0">x</div><div class="kb-full-key" data-heat="0">c</div><div class="kb-full-key" data-heat="3">v</div><div class="kb-full-key" data-heat="4">b</div><div class="kb-full-key" data-heat="0">n</div><div class="kb-full-key" data-heat="1">m</div><div class="kb-full-key" data-heat="0">,</div><div class="kb-full-key" data-heat="0">.</div><div class="kb-full-key" data-heat="2">/</div><div class="kb-full-key wider" data-heat="0">Shift</div>
+            </div>
+            <div class="kb-full-row">
+              <div class="kb-full-key widest" data-heat="1">Space</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Mode breakdown ── -->
+      <div class="glass-card chart-card reveal" style="margin-top:20px">
+        <div class="chart-title mb-24">📂 Performance by Mode</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+          <div style="padding:16px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.8rem;margin-bottom:8px">⚡</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:4px">Standard</div>
+            <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--neon-blue)">—</div>
+            <div class="caption">Best WPM</div>
+          </div>
+          <div style="padding:16px;background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.15);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.8rem;margin-bottom:8px">💻</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:4px">Code</div>
+            <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--neon-purple)">—</div>
+            <div class="caption">Best WPM</div>
+          </div>
+          <div style="padding:16px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.8rem;margin-bottom:8px">🎯</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:4px">Placement</div>
+            <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--neon-gold)">—</div>
+            <div class="caption">Best WPM</div>
+          </div>
+          <div style="padding:16px;background:rgba(6,255,212,0.06);border:1px solid rgba(6,255,212,0.15);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.8rem;margin-bottom:8px">🌏</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:4px">Tamil</div>
+            <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--neon-cyan)">—</div>
+            <div class="caption">Best WPM</div>
+          </div>
+          <div style="padding:16px;background:rgba(57,255,20,0.06);border:1px solid rgba(57,255,20,0.12);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.8rem;margin-bottom:8px">⚔️</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:4px">Battle</div>
+            <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--neon-green)">—</div>
+            <div class="caption">Wins</div>
+          </div>
+          <div style="padding:16px;background:rgba(247,0,255,0.06);border:1px solid rgba(247,0,255,0.12);border-radius:var(--radius-md);text-align:center">
+            <div style="font-size:1.8rem;margin-bottom:8px">📅</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:4px">Daily</div>
+            <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--neon-pink)">0</div>
+            <div class="caption">Completed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Missions ── -->
+      <div class="glass-card chart-card reveal" style="margin-top:20px" id="missions">
+        <div class="chart-header">
+          <div class="chart-title">📋 Daily Missions</div>
+          <span class="badge badge-blue">Resets in <span id="challenge-timer">00:00:00</span></span>
+        </div>
+        <div class="mission-row">
+          <div class="mission-icon">⚡</div>
+          <div>
+            <div class="mission-name">Speed Sprint</div>
+            <div class="mission-desc">Complete 3 typing tests today</div>
+            <div class="progress-bar" style="margin-top:8px;width:200px"><div class="progress-fill" style="width:33%"></div></div>
+          </div>
+          <div class="mission-reward">
+            <div class="mission-reward-val">+200 XP</div>
+            <div class="mission-reward-label">50 coins</div>
+          </div>
+        </div>
+        <div class="mission-row">
+          <div class="mission-icon">🎯</div>
+          <div>
+            <div class="mission-name">Sharp Shooter</div>
+            <div class="mission-desc">Achieve 95%+ accuracy in any test</div>
+            <div class="progress-bar" style="margin-top:8px;width:200px"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div class="mission-reward">
+            <div class="mission-reward-val">+150 XP</div>
+            <div class="mission-reward-label">30 coins</div>
+          </div>
+        </div>
+        <div class="mission-row">
+          <div class="mission-icon">💻</div>
+          <div>
+            <div class="mission-name">Code Warrior</div>
+            <div class="mission-desc">Complete 1 coding typing test</div>
+            <div class="progress-bar" style="margin-top:8px;width:200px"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div class="mission-reward">
+            <div class="mission-reward-val">+300 XP</div>
+            <div class="mission-reward-label">75 coins</div>
+          </div>
+        </div>
+        <div class="mission-row">
+          <div class="mission-icon">🔥</div>
+          <div>
+            <div class="mission-name">On Fire</div>
+            <div class="mission-desc">Maintain 70+ WPM for a full 60s test</div>
+            <div class="progress-bar" style="margin-top:8px;width:200px"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div class="mission-reward">
+            <div class="mission-reward-val">+500 XP</div>
+            <div class="mission-reward-label">120 coins</div>
+          </div>
+        </div>
+        <div class="mission-row" style="border:1px solid rgba(255,215,0,0.2);background:rgba(255,215,0,0.04)">
+          <div class="mission-icon">🌟</div>
+          <div>
+            <div class="mission-name">Daily Champion <span class="badge badge-gold" style="margin-left:8px;font-size:0.65rem">BONUS</span></div>
+            <div class="mission-desc">Complete all 4 missions above</div>
+            <div class="progress-bar" style="margin-top:8px;width:200px"><div class="progress-fill" style="width:0%;background:linear-gradient(90deg,var(--neon-gold),#ff8c00)"></div></div>
+          </div>
+          <div class="mission-reward">
+            <div class="mission-reward-val" style="color:var(--neon-gold)">+1000 XP</div>
+            <div class="mission-reward-label">Special Badge 🏅</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Activity Calendar ── -->
+      <div class="glass-card chart-card reveal" style="margin-top:20px" id="activity">
+        <div class="chart-header">
+          <div class="chart-title">📅 Typing Activity — Last 12 Weeks</div>
+        </div>
+        <div class="activity-grid" id="activity-cal"></div>
+        <div class="flex gap-16 mt-16">
+          <div class="flex items-center gap-6"><div class="activity-day"></div><span class="caption">No activity</span></div>
+          <div class="flex items-center gap-6"><div class="activity-day" data-level="1"></div><span class="caption">1–2 tests</span></div>
+          <div class="flex items-center gap-6"><div class="activity-day" data-level="2"></div><span class="caption">3–5 tests</span></div>
+          <div class="flex items-center gap-6"><div class="activity-day" data-level="3"></div><span class="caption">6–9 tests</span></div>
+          <div class="flex items-center gap-6"><div class="activity-day" data-level="4"></div><span class="caption">10+ tests</span></div>
+        </div>
+      </div>
+
+      <!-- ── Badges ── -->
+      <div class="glass-card chart-card reveal" style="margin-top:20px" id="badges">
+        <div class="chart-header">
+          <div class="chart-title">🏅 Achievement Badges</div>
+          <span class="caption">0 / 40 unlocked</span>
+        </div>
+        <div class="badge-showcase">
+          <!-- Unlocked example -->
+          <!-- Locked badges -->
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">🚀</div>
+            <div class="achievement-name">Century Club</div>
+            <div class="achievement-desc">100 WPM</div>
+          </div>
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">🔥</div>
+            <div class="achievement-name">On Fire</div>
+            <div class="achievement-desc">30-day streak</div>
+          </div>
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">💎</div>
+            <div class="achievement-name">Perfectionist</div>
+            <div class="achievement-desc">100% accuracy</div>
+          </div>
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">⚔️</div>
+            <div class="achievement-name">Arena King</div>
+            <div class="achievement-desc">Win 10 battles</div>
+          </div>
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">🌏</div>
+            <div class="achievement-name">Polyglot</div>
+            <div class="achievement-desc">Tamil + English</div>
+          </div>
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">💻</div>
+            <div class="achievement-name">Code Ninja</div>
+            <div class="achievement-desc">50 code tests</div>
+          </div>
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">🌙</div>
+            <div class="achievement-name">Night Owl</div>
+            <div class="achievement-desc">Practice past midnight</div>
+          </div>
+          <div class="glass-card achievement" style="opacity:0.35;padding:16px 8px">
+            <div class="achievement-icon" style="filter:grayscale(1)">⚡</div>
+            <div class="achievement-name">Speed Demon</div>
+            <div class="achievement-desc">50 WPM</div>
+          </div>
+        </div>
+        <div class="mt-24">
+          <a href="profile.html" class="btn btn-ghost btn-sm">View All 40 Badges →</a>
+        </div>
+      </div>
+
+      <!-- AdSense -->
+      <div class="adsense-horizontal reveal" style="margin-top:24px">Advertisement · 728×90</div>
+
+    </main>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // ── Activity calendar generator ──
+    (function(){
+      const cal = document.getElementById('activity-cal');
+      const levels = [0,0,0,1,0,2,3,0,1,0,0,2,4,1,0,0,3,2,1,0,4,3,2,1,0,0,1,2,3,4,0,1,0,2,0,3,1,0,4,2,1,0,0,3,2,1,0,4,0,0,1,2,0,3,2,1,4,0,0,1,2,3,0,1,2,0,3,4,1,0,0,2,3,1,0,4,0,2,1,3,0,0,2,0];
+      levels.forEach(l => {
+        const d = document.createElement('div');
+        d.className = 'activity-day';
+        if (l > 0) d.dataset.level = l;
+        cal.appendChild(d);
+      });
+
+      // Range tab interaction
+      document.querySelectorAll('.range-tab').forEach(btn => {
+        btn.addEventListener('click', function(){
+          document.querySelectorAll('.range-tab').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

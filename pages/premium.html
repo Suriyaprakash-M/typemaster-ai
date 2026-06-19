@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeMaster AI Premium — Unlock the Full AI Coach & All 12 Modes</title>
+  <meta name="description" content="Upgrade to TypeMaster AI Pro for full AI coaching, all 12 typing modes, advanced analytics, and an ad-free experience. Plans from ₹199/month." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://typemasterai.com/pages/premium.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <style>
+    body { padding-top: 68px; }
+    .premium-page { max-width: 1200px; margin: 0 auto; padding: 60px 24px; }
+    @media(max-width:640px){ .premium-page { padding: 32px 16px; } }
+
+    /* ── Premium hero ── */
+    .premium-hero { text-align: center; margin-bottom: 56px; position: relative; }
+    .premium-hero-glow {
+      position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(255,215,0,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .crown-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 20px; border-radius: 100px;
+      background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.1));
+      border: 1px solid rgba(255,215,0,0.3);
+      font-size: 0.85rem; font-weight: 700; color: var(--neon-gold);
+      margin-bottom: 24px;
+    }
+
+    /* ── Billing toggle ── */
+    .billing-toggle {
+      display: inline-flex; align-items: center; gap: 16px;
+      padding: 6px; background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border); border-radius: 100px;
+      margin-bottom: 48px;
+    }
+    .billing-option {
+      padding: 10px 24px; border-radius: 100px;
+      font-size: 0.88rem; font-weight: 600; color: var(--text-secondary);
+      cursor: pointer; transition: all 0.25s; position: relative;
+    }
+    .billing-option.active { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(168,85,247,0.2)); color: var(--text-primary); }
+    .save-tag {
+      position: absolute; top: -10px; right: -10px;
+      background: var(--neon-green); color: #000;
+      font-size: 0.62rem; font-weight: 800; padding: 2px 8px; border-radius: 100px;
+    }
+
+    /* ── Pricing comparison ── */
+    .pricing-grid-premium { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-bottom: 60px; }
+    @media(max-width:900px){ .pricing-grid-premium { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto 60px; } }
+
+    /* ── Feature comparison table ── */
+    .compare-table { width: 100%; border-collapse: collapse; }
+    .compare-table th, .compare-table td {
+      padding: 16px 20px; text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.88rem;
+    }
+    .compare-table th { font-weight: 700; }
+    .compare-table td:first-child, .compare-table th:first-child { text-align: left; color: var(--text-secondary); }
+    .compare-table thead th { padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .check-yes { color: var(--neon-cyan); font-size: 1.1rem; }
+    .check-no { color: var(--text-muted); font-size: 1.1rem; }
+    .col-highlight { background: rgba(168,85,247,0.04); }
+
+    /* ── Feature showcase ── */
+    .premium-feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin: 60px 0; }
+    @media(max-width:800px){ .premium-feature-grid { grid-template-columns: 1fr; } }
+    .pf-card { padding: 32px; text-align: center; }
+    .pf-icon { font-size: 2.2rem; margin-bottom: 16px; }
+
+    /* ── FAQ mini ── */
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; cursor: pointer; font-size: 0.92rem; font-weight: 600; }
+    .faq-toggle-icon { font-size: 1.2rem; color: var(--neon-blue); transition: transform 0.3s; }
+    .faq-item.open .faq-toggle-icon { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s var(--transition); }
+    .faq-item.open .faq-answer { max-height: 200px; }
+    .faq-answer-inner { padding-bottom: 18px; font-size: 0.86rem; color: var(--text-secondary); line-height: 1.7; }
+
+    /* ── Guarantee strip ── */
+    .guarantee-strip {
+      display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+      padding: 24px; margin: 40px 0;
+    }
+    .guarantee-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <div class="nav-logo-icon">⌨</div>
+        <span class="gradient-text">TypeMaster<span style="color:var(--text-secondary);font-weight:400"> AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="typing-test.html">Practice</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="premium.html" class="active">Premium</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="profile.html" class="btn btn-secondary btn-sm">Sign In</a>
+        <a href="premium.html" class="btn btn-primary btn-sm">Get Pro ✦</a>
+        <button class="nav-menu-btn">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="premium-page">
+
+    <!-- Hero -->
+    <div class="premium-hero reveal">
+      <div class="premium-hero-glow"></div>
+      <div class="crown-badge">👑 TypeMaster AI Premium</div>
+      <h1 class="display-xl mb-20">Unlock your <span class="gradient-text-gold">full potential</span></h1>
+      <p class="body-lg text-secondary" style="max-width:560px;margin:0 auto 40px">Get the complete AI Coach, every typing mode, advanced analytics, and an ad-free experience. Cancel anytime.</p>
+
+      <!-- Billing toggle -->
+      <div class="billing-toggle">
+        <div class="billing-option active" id="bill-monthly">Monthly</div>
+        <div class="billing-option" id="bill-yearly">
+          Yearly <span class="save-tag">Save 35%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing cards -->
+    <div class="pricing-grid-premium reveal">
+      <!-- Free -->
+      <div class="glass-card pricing-card">
+        <div class="badge badge-blue mb-16">Free</div>
+        <div class="flex items-end gap-4 mb-8">
+          <span class="price-amount gradient-text">₹0</span>
+        </div>
+        <p class="text-secondary body-md mb-24">Forever free. No credit card needed.</p>
+        <ul class="pricing-features">
+          <li>Unlimited standard tests</li>
+          <li>Basic WPM analytics</li>
+          <li>3 typing modes</li>
+          <li>Daily challenge access</li>
+          <li>Leaderboard visibility</li>
+          <li class="disabled">AI Typing Coach</li>
+          <li class="disabled">Coding Mode (5 languages)</li>
+          <li class="disabled">Tamil Typing</li>
+          <li class="disabled">Battle Arena</li>
+          <li class="disabled">Ad-free experience</li>
+        </ul>
+        <a href="typing-test.html" class="btn btn-secondary w-full" style="justify-content:center">Continue Free</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="glass-card pricing-card popular-card" style="position:relative">
+        <div class="ribbon">Most Popular</div>
+        <div class="badge badge-purple mb-16">Pro</div>
+        <div class="flex items-end gap-4 mb-8">
+          <span class="price-amount gradient-text" id="pro-price">₹199</span>
+          <span class="price-period" id="pro-period">/month</span>
+        </div>
+        <p class="text-secondary body-md mb-24" id="pro-sub">Billed monthly. Cancel anytime.</p>
+        <ul class="pricing-features">
+          <li>Everything in Free</li>
+          <li>AI Typing Coach (full analysis)</li>
+          <li>All 12 typing modes</li>
+          <li>Coding typing — 5 languages</li>
+          <li>Tamil + English typing</li>
+          <li>Battle Arena — unlimited</li>
+          <li>Advanced analytics + heatmap</li>
+          <li>AI-generated practice content</li>
+          <li>Priority support</li>
+          <li>100% ad-free</li>
+        </ul>
+        <button class="btn btn-primary w-full" style="justify-content:center" onclick="window.TypeMaster.showToast('Redirecting to checkout...','purple')">Upgrade to Pro →</button>
+      </div>
+
+      <!-- Team -->
+      <div class="glass-card pricing-card">
+        <div class="badge badge-gold mb-16">Team / Institute</div>
+        <div class="flex items-end gap-4 mb-8">
+          <span class="price-amount gradient-text-gold" id="team-price">₹999</span>
+          <span class="price-period" id="team-period">/month</span>
+        </div>
+        <p class="text-secondary body-md mb-24">For colleges, coaching centres & companies.</p>
+        <ul class="pricing-features">
+          <li>Everything in Pro</li>
+          <li>Up to 50 members</li>
+          <li>Admin dashboard</li>
+          <li>Custom practice content</li>
+          <li>Progress reports & exports</li>
+          <li>Bulk student onboarding</li>
+          <li>Dedicated account manager</li>
+          <li>White-label option</li>
+          <li>API access</li>
+          <li>SLA guarantee</li>
+        </ul>
+        <a href="contact.html" class="btn btn-secondary w-full" style="justify-content:center">Contact Sales</a>
+      </div>
+    </div>
+
+    <!-- Guarantee strip -->
+    <div class="guarantee-strip reveal">
+      <div class="guarantee-item">🔒 <span>Secure payments via Razorpay/Stripe</span></div>
+      <div class="guarantee-item">↩️ <span>7-day money-back guarantee</span></div>
+      <div class="guarantee-item">🚫 <span>Cancel anytime, no questions asked</span></div>
+      <div class="guarantee-item">⭐ <span>4.9/5 rated by 12,800+ Pro users</span></div>
+    </div>
+
+    <!-- AdSense -->
+    <div class="adsense-horizontal reveal">Advertisement · 728×90</div>
+
+    <!-- Feature comparison table -->
+    <div class="glass-card reveal" style="padding:32px;margin-top:48px;overflow-x:auto">
+      <h2 class="heading-xl text-center mb-32">Compare <span class="gradient-text">Every Feature</span></h2>
+      <table class="compare-table" style="min-width:600px">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Free</th>
+            <th class="col-highlight" style="color:var(--neon-purple)">Pro</th>
+            <th style="color:var(--neon-gold)">Team</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Standard typing test</td><td><span class="check-yes">✓</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>AI Typing Coach (full)</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Coding Typing Mode (5 languages)</td><td>1 language</td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Placement Prep Mode</td><td>Limited</td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Engineering Student Mode</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Tamil + English Typing</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Typing Battle Arena</td><td>3 battles/day</td><td class="col-highlight">Unlimited</td><td>Unlimited</td></tr>
+          <tr><td>Advanced Analytics & Heatmap</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>AI-Generated Practice Content</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Ad-Free Experience</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Admin Dashboard</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-no">✕</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Multi-user Management</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-no">✕</span></td><td>Up to 50</td></tr>
+          <tr><td>API Access</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-no">✕</span></td><td><span class="check-yes">✓</span></td></tr>
+          <tr><td>Priority Support</td><td><span class="check-no">✕</span></td><td class="col-highlight"><span class="check-yes">✓</span></td><td>Dedicated Manager</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Premium feature showcase -->
+    <div class="premium-feature-grid reveal">
+      <div class="glass-card pf-card">
+        <div class="pf-icon">🤖</div>
+        <h3 class="heading-md mb-12">Unlimited AI Coaching</h3>
+        <p class="body-md text-secondary">Get deep mistake analysis after every single test — not just summaries, but specific finger-level training plans.</p>
+      </div>
+      <div class="glass-card pf-card">
+        <div class="pf-icon">📊</div>
+        <h3 class="heading-md mb-12">Advanced Analytics</h3>
+        <p class="body-md text-secondary">90-day trend charts, full keyboard heatmaps, and mode-by-mode performance breakdowns.</p>
+      </div>
+      <div class="glass-card pf-card">
+        <div class="pf-icon">🚫</div>
+        <h3 class="heading-md mb-12">Zero Distractions</h3>
+        <p class="body-md text-secondary">Completely ad-free practice sessions so you can focus on what matters — getting faster.</p>
+      </div>
+    </div>
+
+    <!-- Testimonial -->
+    <div class="glass-card reveal" style="padding:40px;text-align:center;background:linear-gradient(135deg,rgba(255,215,0,0.05),rgba(168,85,247,0.05));margin:48px 0">
+      <div class="stars" style="justify-content:center;display:flex">★★★★★</div>
+      <p style="font-size:1.1rem;font-style:italic;color:var(--text-secondary);max-width:600px;margin:16px auto;line-height:1.7">"Upgrading to Pro was the best ₹199 I've spent this year. The AI coach found that I was double-tapping the space bar — something I never would've noticed myself. My WPM jumped from 58 to 81 in three weeks."</p>
+      <div class="flex items-center justify-center gap-12 mt-20">
+        <div class="avatar-circle">PK</div>
+        <div style="text-align:left">
+          <div style="font-weight:700;font-size:0.9rem">Priya Krishnamurthy</div>
+          <div class="caption">Software Engineer, Zoho · Pro user since 2024</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="reveal" style="margin-top:48px">
+      <h2 class="heading-xl text-center mb-24">Premium <span class="gradient-text">FAQ</span></h2>
+      <div class="glass-card" style="padding:8px 28px">
+        <div class="faq-item open">
+          <div class="faq-question" onclick="toggleFaq(this)">Can I cancel my subscription anytime?<span class="faq-toggle-icon">+</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Yes, cancel anytime from Profile → Settings → Billing. You keep Pro access until the end of your current billing period — no penalties.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Is there a student discount?<span class="faq-toggle-icon">+</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Yes! Students with a valid .edu or college ID get 40% off the Pro plan. Contact support after signing up to apply your discount.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What payment methods are accepted?<span class="faq-toggle-icon">+</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">We accept UPI, credit/debit cards, net banking, and popular wallets via Razorpay, plus international cards via Stripe.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Can I switch from monthly to yearly later?<span class="faq-toggle-icon">+</span></div>
+          <div class="faq-answer"><div class="faq-answer-inner">Absolutely — you can upgrade to yearly billing at any time and we'll prorate the difference automatically.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="glass-card text-center reveal" style="padding:60px 32px;margin-top:48px;background:linear-gradient(135deg,rgba(255,215,0,0.06),rgba(168,85,247,0.06))">
+      <h2 class="display-md mb-16">Ready to type at your <span class="gradient-text-gold">full potential</span>?</h2>
+      <p class="body-lg text-secondary mb-28" style="max-width:480px;margin:0 auto 28px">Join 12,800+ Pro members already training smarter with AI.</p>
+      <button class="btn btn-primary btn-lg" onclick="window.TypeMaster.showToast('Redirecting to checkout...','purple')">👑 Upgrade to Pro Now</button>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer style="position:relative;z-index:1;background:var(--bg-deep);border-top:1px solid var(--glass-border);padding:32px 24px;text-align:center">
+    <p style="color:var(--text-muted);font-size:0.83rem">© 2025 TypeMaster AI · <a href="../index.html" style="color:var(--neon-blue)">Home</a> · <a href="contact.html" style="color:var(--neon-blue)">Contact</a> · <a href="about.html" style="color:var(--neon-blue)">About</a></p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    function toggleFaq(el) {
+      const item = el.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    }
+    document.getElementById('bill-monthly').addEventListener('click', function(){
+      document.getElementById('bill-yearly').classList.remove('active');
+      this.classList.add('active');
+      document.getElementById('pro-price').textContent = '₹199';
+      document.getElementById('pro-period').textContent = '/month';
+      document.getElementById('pro-sub').textContent = 'Billed monthly. Cancel anytime.';
+      document.getElementById('team-price').textContent = '₹999';
+      document.getElementById('team-period').textContent = '/month';
+    });
+    document.getElementById('bill-yearly').addEventListener('click', function(){
+      document.getElementById('bill-monthly').classList.remove('active');
+      this.classList.add('active');
+      document.getElementById('pro-price').textContent = '₹129';
+      document.getElementById('pro-period').textContent = '/month';
+      document.getElementById('pro-sub').textContent = 'Billed ₹1,548/year. Save 35%.';
+      document.getElementById('team-price').textContent = '₹649';
+      document.getElementById('team-period').textContent = '/month';
+    });
+  </script>
+</body>
+</html>
